@@ -12,6 +12,10 @@ class date{
         int mes;
         int ano;
 
+        date(){
+
+        }
+
         date(int d, int m, int a){
             dia = d;
             mes = m;
@@ -27,13 +31,23 @@ class jogo{
         float valor;
         int numID;
         string desenvolvedor;
-        date dataLancamento();
+        date dataLançamento;
 
-        jogo(string N, int disp, float value, int id, string dev, date lancamento){
+        jogo(){
 
         }
+
+        jogo(string N, int disp, float value, int id, string dev, date lançamento){
+            nome = N;
+            disponiveis = disp;
+            valor = value;
+            numID = id;
+            desenvolvedor = dev;
+            dataLançamento = lançamento;
+        }
+
         void relatorio(){
-            //Informa as próprias variáveis
+            cout << numID << "\t" << nome << "\t" << valor << "\t" << desenvolvedor << "\t" << disponiveis << "\n";
         }
 };
 
@@ -58,29 +72,34 @@ class funcoes{
             int disponiveis, id, data, mes, ano;
             float valor;
 
-            cout << "Escreva o nome do jogo";
-            cin >> Nome;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Escreva o nome do jogo: ";
+            getline(cin, Nome);
 
-            cout << "Escreva o preço";
+            cout << "Escreva o preço: ";
             cin >> valor;
 
-            cout << "Escreva a quantidade disponível";
+            cout << "Escreva a quantidade disponível: ";
             cin >> disponiveis;
 
-            cout << "Escreva o nome do desenvolvedor";
-            cin >> Dev;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Escreva o nome do desenvolvedor: ";
+            getline(cin, Dev);
 
-            cout << "Escreva o dia do lançamento";
+            cout << "Escreva o dia do lançamento: ";
             cin >> data;
 
-            cout << "Escreva o mes do lançamento";
+            cout << "Escreva o mes do lançamento: ";
             cin >> mes;
 
-            cout << "Escreva o ano do lançamento";
+            cout << "Escreva o ano do lançamento: ";
             cin >> ano;
 
-            id = jogos.size();
-            jogos.push_back(jogo(Nome, disponiveis, valor, id, Dev, date(data, mes, ano)));
+            id = cadastrados;
+            jogo newgame(Nome, disponiveis, valor, id, Dev, date(data, mes, ano));
+            jogos.push_back(newgame);
             cadastrados += 1;
         }
 
@@ -97,18 +116,18 @@ class funcoes{
         }
 };
 
+class venda{
+    
+};
+
 class Manager : public funcoes{
     public:
         vector<jogo> jogos;
-        vector<venda> venda;
+        vector<venda> vendas;
         vector<usuario> pessoas;
         int jogosCadastrados = 0;
         int vendasCadastradas = 0;
         int pessoasCadastradas = 0;
-};
-
-class venda {
-    
 };
 
 int main(){
@@ -117,9 +136,10 @@ int main(){
     while(1){
         int rsp;
 
+
         cout << "Sistema de Controle\n";
         cout << "Escolha uma das opções\n";
-        cout << "1.Inserir\n2.Realizar venda\n2.Listar todos\n3.Exibir um\n4.Alterar\n5.Remover\n6.Exibir Relatório\n7.Sair\n";
+        cout << "1.Inserir\n2.Realizar venda\n3.Listar todos\n4.Exibir um\n5.Alterar\n6.Remover\n7.Exibir Relatório\n8.Sair\n";
         while(!(cin >> rsp) || rsp < 1 || rsp > 7){
             cout << "Opção inválida, tente novamente\n";
             cin.clear();
@@ -130,6 +150,7 @@ int main(){
             case 1:
                 //Inserir
                 //Jogo no estoque ou uma venda
+                manager.adicionar(manager.jogos, manager.jogosCadastrados);
                 break;
             case 2:
                 //Realizar Venda
@@ -147,6 +168,9 @@ int main(){
                 break;
             case 7:
                 //Exibir relatório
+                for(int i = 0; i < manager.jogos.size(); i++){
+                    manager.jogos[i].relatorio();
+                }
                 break;
             case 8:
                 //Break
