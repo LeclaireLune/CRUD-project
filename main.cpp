@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <limits>
-#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -67,7 +67,16 @@ class usuario{
 
 class funcoes{
     public:
-        void adicionar(vector<jogo> &jogos, int &cadastrados){
+        void ChecarTipoErrado(auto &var){
+            while(!(cin >> var)){
+                cout << "Opção inválida, tente novamente\n";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
+            return;
+        }
+
+        void adicionarJogos(vector<jogo> &jogos, int &cadastrados){
             string Nome, Dev;
             int disponiveis, id, data, mes, ano;
             float valor;
@@ -78,10 +87,10 @@ class funcoes{
             getline(cin, Nome);
 
             cout << "Escreva o preço: ";
-            cin >> valor;
+            ChecarTipoErrado(valor);
 
             cout << "Escreva a quantidade disponível: ";
-            cin >> disponiveis;
+            ChecarTipoErrado(disponiveis);
 
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -89,13 +98,25 @@ class funcoes{
             getline(cin, Dev);
 
             cout << "Escreva o dia do lançamento: ";
-            cin >> data;
+            while(!(cin >> data) || data < 1 || data > 31){
+                cout << "Opção inválida, tente novamente\n";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
 
             cout << "Escreva o mes do lançamento: ";
-            cin >> mes;
+            while(!(cin >> mes) || mes < 1 || mes > 12){
+                cout << "Opção inválida, tente novamente\n";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
 
             cout << "Escreva o ano do lançamento: ";
-            cin >> ano;
+            while(!(cin >> ano) || ano < 1900){
+                cout << "Opção inválida, tente novamente\n";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
 
             id = cadastrados;
             jogo newgame(Nome, disponiveis, valor, id, Dev, date(data, mes, ano));
@@ -107,8 +128,99 @@ class funcoes{
 
         }
 
-        void alterar(){
+        void alterarJogos(vector<jogo> &jogos){
+            while(1){
 
+                string Nome;
+                int rsp, idEncontrado = -1;
+                char tentarDenovo, alterarMais;
+
+                cout << "Qual o nome do jogo a ser alterado?";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                getline(cin, Nome);
+
+                for (jogo n : jogos){
+                    if(n.nome == Nome){
+                        idEncontrado = n.numID;
+                    }
+                }
+
+                if(idEncontrado == -1){
+                    cout << "Não foi encontrado, tentar novamente? (s/n)\n";
+                    cin >> tentarDenovo;
+                    if(tentarDenovo == 's'){
+                        alterarJogos(jogos);
+                        return;
+                    }
+
+                    return;
+                }
+
+                cout << "O que deseja alterar?\n1.Nome\n2.Preço\n3.Disponiveis\n4.Desenvolvedor\n5.Data de lançamento\n";
+                cin >> rsp;
+
+                switch (rsp){
+                case 1:
+                    cout << "Escreva o novo nome: ";
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    getline(cin,jogos[idEncontrado].nome);
+                    break;
+                
+                case 2:
+                    cout << "Escreva o novo preço: ";
+                    ChecarTipoErrado(jogos[idEncontrado].valor);
+                    break;
+                
+                case 3:
+                    cout << "Escreva a nova quantidade disponível: ";
+                    ChecarTipoErrado(jogos[idEncontrado].disponiveis);
+                    break;
+                
+                case 4:
+                    cout << "Escreva o novo desenvolvedor: ";
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    getline(cin, jogos[idEncontrado].desenvolvedor);
+                    break;
+
+                case 5:
+                    cout << "Escreva o novo dia: ";
+                    while(!(cin >> jogos[idEncontrado].dataLançamento.dia) || jogos[idEncontrado].dataLançamento.dia < 1 || jogos[idEncontrado].dataLançamento.dia > 31){
+                        cout << "Opção inválida, tente novamente\n";
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    }
+
+                    cout << "Escreva o novo mês: ";
+                    while(!(cin >> jogos[idEncontrado].dataLançamento.mes) || jogos[idEncontrado].dataLançamento.mes < 1 || jogos[idEncontrado].dataLançamento.mes > 31){
+                        cout << "Opção inválida, tente novamente\n";
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    }
+
+                    cout << "Escreva a novo ano: ";
+                    while(!(cin >> jogos[idEncontrado].dataLançamento.ano) || jogos[idEncontrado].dataLançamento.ano < 1 || jogos[idEncontrado].dataLançamento.ano > 31){
+                        cout << "Opção inválida, tente novamente\n";
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    }
+                    break;
+                }
+
+                cout << "Deseja alterar mais alguma coisa? (s/n)\n";
+                cin >> alterarMais;
+                
+                if(alterarMais == 's'){
+
+                }
+                else{
+                    break;
+                }
+            }
+
+            return;
         }
 
         void relatorio(){
@@ -150,7 +262,7 @@ int main(){
             case 1:
                 //Inserir
                 //Jogo no estoque ou uma venda
-                manager.adicionar(manager.jogos, manager.jogosCadastrados);
+                manager.adicionarJogos(manager.jogos, manager.jogosCadastrados);
                 break;
             case 2:
                 //Realizar Venda
@@ -161,6 +273,7 @@ int main(){
                 //Exibir um
                 break;
             case 5:
+                manager.alterarJogos(manager.jogos);
                 //Alterar
                 break;
             case 6:
