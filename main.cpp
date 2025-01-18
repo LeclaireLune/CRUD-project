@@ -76,14 +76,30 @@ class funcoes{
             return;
         }
 
+        void LimparBuffer(){
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+
+        int ProcurarIdJogo(vector<jogo> jogos, string Nome){
+            int idEncontrado = -1;
+
+            for (jogo n : jogos){
+                if(n.nome == Nome){
+                        idEncontrado = n.numID;
+                }
+            }
+
+            return idEncontrado;
+        }
+
         void adicionarJogos(vector<jogo> &jogos, int &cadastrados){
             string Nome, Dev;
             int disponiveis, id, data, mes, ano;
             float valor;
 
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "Escreva o nome do jogo: ";
+            LimparBuffer();
             getline(cin, Nome);
 
             cout << "Escreva o preço: ";
@@ -92,30 +108,26 @@ class funcoes{
             cout << "Escreva a quantidade disponível: ";
             ChecarTipoErrado(disponiveis);
 
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "Escreva o nome do desenvolvedor: ";
+            LimparBuffer();
             getline(cin, Dev);
 
             cout << "Escreva o dia do lançamento: ";
             while(!(cin >> data) || data < 1 || data > 31){
                 cout << "Opção inválida, tente novamente\n";
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                LimparBuffer();
             }
 
             cout << "Escreva o mes do lançamento: ";
             while(!(cin >> mes) || mes < 1 || mes > 12){
                 cout << "Opção inválida, tente novamente\n";
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                LimparBuffer();
             }
 
             cout << "Escreva o ano do lançamento: ";
             while(!(cin >> ano) || ano < 1900){
                 cout << "Opção inválida, tente novamente\n";
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                LimparBuffer();
             }
 
             id = cadastrados;
@@ -132,19 +144,15 @@ class funcoes{
             while(1){
 
                 string Nome;
-                int rsp, idEncontrado = -1;
+                int rsp, idEncontrado;
                 char tentarDenovo, alterarMais;
 
-                cout << "Qual o nome do jogo a ser alterado?";
+                cout << "Qual o nome do jogo a ser alterado?\n";
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 getline(cin, Nome);
 
-                for (jogo n : jogos){
-                    if(n.nome == Nome){
-                        idEncontrado = n.numID;
-                    }
-                }
+                idEncontrado = ProcurarIdJogo(jogos, Nome);
 
                 if(idEncontrado == -1){
                     cout << "Não foi encontrado, tentar novamente? (s/n)\n";
@@ -163,8 +171,7 @@ class funcoes{
                 switch (rsp){
                 case 1:
                     cout << "Escreva o novo nome: ";
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    LimparBuffer();
                     getline(cin,jogos[idEncontrado].nome);
                     break;
                 
@@ -180,8 +187,7 @@ class funcoes{
                 
                 case 4:
                     cout << "Escreva o novo desenvolvedor: ";
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    LimparBuffer();
                     getline(cin, jogos[idEncontrado].desenvolvedor);
                     break;
 
@@ -189,27 +195,25 @@ class funcoes{
                     cout << "Escreva o novo dia: ";
                     while(!(cin >> jogos[idEncontrado].dataLançamento.dia) || jogos[idEncontrado].dataLançamento.dia < 1 || jogos[idEncontrado].dataLançamento.dia > 31){
                         cout << "Opção inválida, tente novamente\n";
-                        cin.clear();
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        LimparBuffer();
                     }
 
                     cout << "Escreva o novo mês: ";
                     while(!(cin >> jogos[idEncontrado].dataLançamento.mes) || jogos[idEncontrado].dataLançamento.mes < 1 || jogos[idEncontrado].dataLançamento.mes > 31){
                         cout << "Opção inválida, tente novamente\n";
-                        cin.clear();
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        LimparBuffer();
                     }
 
-                    cout << "Escreva a novo ano: ";
+                    cout << "Escreva o novo ano: ";
                     while(!(cin >> jogos[idEncontrado].dataLançamento.ano) || jogos[idEncontrado].dataLançamento.ano < 1 || jogos[idEncontrado].dataLançamento.ano > 31){
                         cout << "Opção inválida, tente novamente\n";
-                        cin.clear();
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        LimparBuffer();
                     }
                     break;
                 }
 
                 cout << "Deseja alterar mais alguma coisa? (s/n)\n";
+                LimparBuffer();
                 cin >> alterarMais;
                 
                 if(alterarMais == 's'){
