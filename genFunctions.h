@@ -4,6 +4,8 @@
 #include <iostream>
 #include <limits>
 
+using namespace std;
+
 class GeneralFunctions{
     public:
         void ChecarTipoErrado(auto &var){

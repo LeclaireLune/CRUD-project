@@ -8,6 +8,7 @@
 
 #include "objects.h"
 #include "genFunctions.h"
+#include "manager.h"
 
 using namespace std;
 
@@ -25,47 +26,19 @@ class funcoes : public GeneralFunctions{
             return idEncontrado;
         }
 
-        void adicionarJogos(vector<jogo> &jogos, int &cadastrados){
-            string Nome, Dev;
-            int disponiveis, id, data, mes, ano;
-            float valor;
-
-            cout << "Escreva o nome do jogo: ";
-            LimparBuffer();
-            getline(cin, Nome);
-
-            cout << "Escreva o preço: ";
-            ChecarTipoErrado(valor);
-
-            cout << "Escreva a quantidade disponível: ";
-            ChecarTipoErrado(disponiveis);
-
-            cout << "Escreva o nome do desenvolvedor: ";
-            LimparBuffer();
-            getline(cin, Dev);
-
-            cout << "Escreva o dia do lançamento: ";
-            while(!(cin >> data) || data < 1 || data > 31){
-                cout << "Opção inválida, tente novamente\n";
-                LimparBuffer();
+        void adicionar(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int &Cadastrados, int option){
+            if(option == 1){
+                jogo newgame = newgame.AdicionarJogo(jogos, Cadastrados);
+                jogos.push_back(newgame);
+                Cadastrados += 1;
             }
-
-            cout << "Escreva o mes do lançamento: ";
-            while(!(cin >> mes) || mes < 1 || mes > 12){
-                cout << "Opção inválida, tente novamente\n";
-                LimparBuffer();
+            else if(option == 2){
+                //Criar usuario
             }
-
-            cout << "Escreva o ano do lançamento: ";
-            while(!(cin >> ano) || ano < 1900){
-                cout << "Opção inválida, tente novamente\n";
-                LimparBuffer();
+            else if(option == 3){
+                //Criar venda
             }
-
-            id = cadastrados;
-            jogo newgame(Nome, disponiveis, valor, id, Dev, date(data, mes, ano));
-            jogos.push_back(newgame);
-            cadastrados += 1;
+            
         }
 
         void remover(){
@@ -96,7 +69,7 @@ class funcoes : public GeneralFunctions{
                 }
 
                 cout << "O que deseja alterar?\n1.Nome\n2.Preço\n3.Disponiveis\n4.Desenvolvedor\n5.Data de lançamento\n";
-                cin >> rsp;
+                ChecarTipoErrado(rsp);
 
                 switch (rsp){
                 case 1:
@@ -135,16 +108,15 @@ class funcoes : public GeneralFunctions{
                     }
 
                     cout << "Escreva o novo ano: ";
-                    while(!(cin >> jogos[idEncontrado].dataLançamento.ano) || jogos[idEncontrado].dataLançamento.ano < 1 || jogos[idEncontrado].dataLançamento.ano > 31){
+                    while(!(cin >> jogos[idEncontrado].dataLançamento.ano) || jogos[idEncontrado].dataLançamento.ano < 1900){
                         cout << "Opção inválida, tente novamente\n";
                         LimparBuffer();
                     }
                     break;
                 }
 
-                cout << "Deseja alterar mais alguma coisa? (s/n)\n";
-                LimparBuffer();
-                cin >> alterarMais;
+                cout << "Deseja alterar mais algum jogo? (s/n)\n";
+                ChecarTipoErrado(alterarMais);
                 
                 if(alterarMais == 's'){
 
@@ -180,7 +152,9 @@ class funcoes : public GeneralFunctions{
             }
 
             jogos[idEncontrado].relatorio();
-
+            cout << "Aperte enter para continuar\n";
+            LimparBuffer();
+            cin.get();
         }
 
         void relatorioJogo(vector<jogo> jogos){
@@ -195,7 +169,7 @@ class funcoes : public GeneralFunctions{
                 quantidadeTotal += n.disponiveis;
             }
 
-            if(cadastrados > 1){
+            if(cadastrados < 1){
                 cout << cadastrados << " Jogo |\t" << quantidadeTotal << " Quantidade Total |\t" << valorTotal << " Valor total\n";
             }
             else{

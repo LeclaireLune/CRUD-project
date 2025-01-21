@@ -1,9 +1,14 @@
 #ifndef OBJECTS_H
 #define OBJECTS_H
 
+#include <iostream>
 #include <string>
+#include <vector>
+#include "genFunctions.h"
 
 using namespace std;
+
+GeneralFunctions GF;
 
 class date{
     public:
@@ -19,6 +24,14 @@ class date{
             dia = d;
             mes = m;
             ano = a;
+        }
+
+        string Exibir(){
+            string data;
+
+            cout << dia << "/" << mes << "/" << ano;
+
+            return data;
         }
 };
 
@@ -46,10 +59,49 @@ class jogo{
         }
 
         void relatorio(){
-            cout << numID << "\t" << nome << "\t" << valor << "\t" << desenvolvedor << "\t" << disponiveis << "\n";
-            cout << "Aperte enter para continuar\n";
-            
-            cin.get();
+            cout << numID << "\t" << nome << "\t" << valor << "\t" << desenvolvedor << "\t" << disponiveis << "\t" << dataLançamento.Exibir() << "\n";
+        }
+
+        jogo AdicionarJogo(vector<jogo> &jogos, int cadastrados){
+            string Nome, Dev;
+            int disponiveis, id, data, mes, ano;
+            float valor;
+
+            cout << "Escreva o nome do jogo: ";
+            GF.LimparBuffer();
+            getline(cin, Nome);
+
+            cout << "Escreva o preço: ";
+            GF.ChecarTipoErrado(valor);
+
+            cout << "Escreva a quantidade disponível: ";
+            GF.ChecarTipoErrado(disponiveis);
+
+            cout << "Escreva o nome do desenvolvedor: ";
+            GF.LimparBuffer();
+            getline(cin, Dev);
+
+            cout << "Escreva o dia do lançamento: ";
+            while(!(cin >> data) || data < 1 || data > 31){
+                cout << "Opção inválida, tente novamente\n";
+                GF.LimparBuffer();
+            }
+
+            cout << "Escreva o mes do lançamento: ";
+            while(!(cin >> mes) || mes < 1 || mes > 12){
+                cout << "Opção inválida, tente novamente\n";
+                GF.LimparBuffer();
+            }
+
+            cout << "Escreva o ano do lançamento: ";
+            while(!(cin >> ano) || ano < 1900){
+                cout << "Opção inválida, tente novamente\n";
+                GF.LimparBuffer();
+            }
+
+            id = cadastrados;
+            jogo newgame(Nome, disponiveis, valor, id, Dev, date(data, mes, ano));
+            return newgame;
         }
 };
 
