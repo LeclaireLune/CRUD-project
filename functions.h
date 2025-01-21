@@ -5,27 +5,11 @@
 #include <limits>
 #include <vector>
 #include <string>
+
 #include "objects.h"
+#include "genFunctions.h"
 
 using namespace std;
-
-namespace std{
-    class GeneralFunctions{
-    public:
-        void ChecarTipoErrado(auto &var){
-            while(!(cin >> var)){
-                cout << "Opção inválida, tente novamente\n";
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            }
-            return;
-        }
-
-        void LimparBuffer(){
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
-};
 
 class funcoes : public GeneralFunctions{ 
     public:
@@ -223,7 +207,6 @@ class funcoes : public GeneralFunctions{
             LimparBuffer();
             cin.get();
         }
-    };
-}
+};
 
 #endif

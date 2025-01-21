@@ -1,11 +1,19 @@
 #include <iostream>
-#include <string>
-#include <vector>
-#include <limits>
-#include <ctime>
+
 #include "objects.h"
+#include "functions.h"
 
 using namespace std;
+
+class Manager : public funcoes{
+    public:
+        vector<jogo> jogos;
+        vector<venda> vendas;
+        vector<usuario> pessoas;
+        int jogosCadastrados = 0;
+        int vendasCadastradas = 0;
+        int pessoasCadastradas = 0;
+};
 
 int main(){
     //Carregar as informações salvas se tiver
