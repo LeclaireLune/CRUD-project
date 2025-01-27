@@ -32,8 +32,14 @@ int main(){
                 break;
 
             case 3:
+                for (venda n : manager.vendas){
+                        n.relatorioSimples();
+                    }
+                    cout << "Aperte enter para continuar";
+                    cin.get();
                 //Listar todas
                 break;
+
             case 4:
                 //Exibir uma
                 break;
