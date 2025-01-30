@@ -51,20 +51,31 @@ class funcoes : public GeneralFunctions{
                 int rsp, idEncontrado;
                 char tentarDenovo, alterarMais;
 
-                cout << "Qual o nome do jogo a ser alterado?\n";
-                LimparBuffer();
-                getline(cin, Nome);
+                if(jogos.size() != 0){
+                    cout << "Qual o nome do jogo a ser exibido? ";
+                    LimparBuffer();
+                    getline(cin, Nome);
 
-                idEncontrado = ProcurarIdJogo(jogos, Nome);
+                    idEncontrado = ProcurarIdJogo(jogos, Nome);
 
-                if(idEncontrado == -1){
-                    cout << "Não foi encontrado, tentar novamente? (s/n)\n";
-                    cin >> tentarDenovo;
-                    if(tentarDenovo == 's'){
-                        alterarJogos(jogos);
+                    if(idEncontrado == -1){
+                        cout << "Não foi encontrado, tentar novamente(s/n)? ";
+                        cin >> tentarDenovo;
+                        if(tentarDenovo == 's'){
+                            ExibirUm(jogos);
+                            return;
+                        }
+
                         return;
                     }
 
+                    jogos[idEncontrado].relatorio();  
+                }
+                else{
+                    cout << "Não há jogos cadastrados\n";
+                    cout << "Aperte enter para continuar\n";
+                    LimparBuffer();
+                    cin.get();
                     return;
                 }
 
@@ -134,25 +145,46 @@ class funcoes : public GeneralFunctions{
             string Nome;
             char tentarDenovo;
 
-            cout << "Qual o nome do jogo a ser exibido? ";
-            LimparBuffer();
-            getline(cin, Nome);
+            if(jogos.size() != 0){
+                cout << "Qual o nome do jogo a ser exibido? ";
+                LimparBuffer();
+                getline(cin, Nome);
 
-            idEncontrado = ProcurarIdJogo(jogos, Nome);
+                idEncontrado = ProcurarIdJogo(jogos, Nome);
 
-            if(idEncontrado == -1){
-                cout << "Não foi encontrado, tentar novamente(s/n)? ";
-                cin >> tentarDenovo;
-                if(tentarDenovo == 's'){
-                    ExibirUm(jogos);
+                if(idEncontrado == -1){
+                    cout << "Não foi encontrado, tentar novamente(s/n)? ";
+                    cin >> tentarDenovo;
+                    if(tentarDenovo == 's'){
+                        ExibirUm(jogos);
+                        return;
+                    }
+
                     return;
                 }
 
-                return;
+                jogos[idEncontrado].relatorio();  
+            }
+            else{
+                cout << "Não há jogos cadastrados\n";
             }
 
-            jogos[idEncontrado].relatorio();
             cout << "Aperte enter para continuar\n";
+            LimparBuffer();
+            cin.get();
+        }
+
+        void exibirTodos(vector<jogo> jogos){
+            if(jogos.size() == 0){
+                cout << "Não há jogos cadastrados\n";
+            }
+            else{
+                for (jogo n : jogos){
+                    n.relatorio();
+                }
+            }
+
+            cout << "Aperte enter para continuar";
             LimparBuffer();
             cin.get();
         }
@@ -169,7 +201,7 @@ class funcoes : public GeneralFunctions{
                 quantidadeTotal += n.disponiveis;
             }
 
-            if(cadastrados < 1){
+            if(cadastrados <= 1){
                 cout << cadastrados << " Jogo |\t" << quantidadeTotal << " Quantidade Total |\t" << valorTotal << " Valor total\n";
             }
             else{

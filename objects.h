@@ -29,7 +29,7 @@ class date{
         string Exibir(){
             string data;
 
-            cout << dia << "/" << mes << "/" << ano;
+            cout << dia << "/" << mes << "/" << ano << "\n";
 
             return data;
         }
@@ -59,7 +59,8 @@ class jogo{
         }
 
         void relatorio(){
-            cout << numID << "\t" << nome << "\t" << valor << "\t" << desenvolvedor << "\t" << disponiveis << "\t" << dataLançamento.Exibir() << "\n";
+            cout << numID << "\t" << nome << "\t" << valor << "\t" << desenvolvedor << "\t" << disponiveis << "\t";
+            dataLançamento.Exibir();
         }
 
         jogo AdicionarJogo(vector<jogo> &jogos, int cadastrados){
@@ -68,6 +69,7 @@ class jogo{
             float valor;
 
             cout << "Escreva o nome do jogo: ";
+        
             GF.LimparBuffer();
             getline(cin, Nome);
 
@@ -148,7 +150,7 @@ class venda{
             int quantidade = 0;
             cout << ID << "\t" << IDComprador << "\t" << valorTotal << "\t" << dataCompra.Exibir() << "\t" << jogosComprados.size() << "\n";
             for(jogo n : jogosComprados){
-                cout << quantidade + 1 << "\." << "\t";
+                cout << quantidade + 1 << "- " << "\t";
 
                 n.relatorio();
             }

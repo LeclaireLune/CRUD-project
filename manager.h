@@ -37,11 +37,7 @@ class Manager : public funcoes{
                     break;
                 
                 case 2:
-                    for (jogo n : manager.jogos){
-                        n.relatorio();
-                    }
-                    cout << "Aperte enter para continuar";
-                    cin.get();
+                    manager.exibirTodos(manager.jogos);
                     break;
 
                 
