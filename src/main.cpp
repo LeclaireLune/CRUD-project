@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "./objetos/manager.h"
+#include "../objetos/manager.h"
 
 using namespace std;
 

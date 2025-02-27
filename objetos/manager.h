@@ -48,7 +48,7 @@ class Manager{
 
                 
                 case 4:
-                    FC.alterar(manager.jogos, manager.pessoas, manager.vendas, jogosCadastrados);
+                    FC.alterar(manager.jogos, manager.pessoas, manager.vendas, 1);
                     break;
 
                 case 5:

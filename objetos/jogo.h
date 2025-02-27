@@ -58,7 +58,7 @@ class jogo{
                 getline(cin, Nome);
 
                 idEncontrado = ProcurarIdJogo(jogos, Nome);
-
+                
                 if(idEncontrado == -1){
                     cout << "Não foi encontrado, tentar novamente(s/n)? ";
                     cin >> tentarDenovo;
