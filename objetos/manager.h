@@ -8,7 +8,7 @@
 
 using namespace std;
 
-class Manager : public funcoes{
+class Manager{
     public:
         vector<jogo> jogos;
         vector<venda> vendas;
@@ -16,6 +16,7 @@ class Manager : public funcoes{
         int jogosCadastrados = 0;
         int vendasCadastradas = 0;
         int pessoasCadastradas = 0;
+        funcoes FC;
 
     void EstoqueMenu(Manager &manager){
         while(1){
@@ -28,39 +29,39 @@ class Manager : public funcoes{
 
             while(!(cin >> rsp) || rsp < 1 || rsp > 7){
                 cout << "Opção inválida, tente novamente\n";
-                manager.LimparBuffer();
+                FC.LimparBuffer();
             }
 
             switch(rsp){
                 case 1:
-                    manager.adicionar(manager.jogos, manager.pessoas, manager.vendas, manager.vendasCadastradas, 1);
+                    FC.adicionar(manager.jogos, manager.pessoas, manager.vendas, manager.vendasCadastradas, 1);
                     break;
                 
                 case 2:
-                    manager.exibirTodos(manager.jogos);
+                    FC.exibirTodos(manager.jogos);
                     break;
 
                 
                 case 3:
-                    manager.ExibirUm(manager.jogos);
+                    FC.ExibirUm(manager.jogos);
                     break;
 
                 
                 case 4:
-                    manager.alterarJogos(manager.jogos);
+                    FC.alterar(manager.jogos, manager.pessoas, manager.vendas, jogosCadastrados, 1);
                     break;
 
-                
                 case 5:
                     break;
 
                 
                 case 6:
-                    manager.relatorioJogo(manager.jogos);
+                    FC.relatorioJogo(manager.jogos);
                     break;
 
                 
                 case 7:
+                    //FC.salvar(manager);
                     return;
             }
         }

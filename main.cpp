@@ -1,7 +1,6 @@
 #include <iostream>
 
-#include "objects.h"
-#include "manager.h"
+#include "./objetos/manager.h"
 
 using namespace std;
 
@@ -18,13 +17,13 @@ int main(){
         cout << "1.Realizar venda\n2.Controle Estoque\n3.Listar todas\n4.Exibir uma\n5.Alterar\n6.Remover\n7.Exibir Relatório\n8.Sair\n";
         while(!(cin >> rsp) || rsp < 1 || rsp > 8){
             cout << "Opção inválida, tente novamente\n";
-            manager.LimparBuffer();
+            manager.FC.LimparBuffer();
         }
 
         switch(rsp){
             case 1:
                 //Realizar venda
-                manager.adicionar(manager.jogos, manager.pessoas, manager.vendas, manager.vendasCadastradas, 3);
+                manager.FC.adicionar(manager.jogos, manager.pessoas, manager.vendas, manager.vendasCadastradas, 3);
                 break;
             case 2:
                 //Controle Estoque
