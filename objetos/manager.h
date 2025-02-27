@@ -38,30 +38,31 @@ class Manager{
                     break;
                 
                 case 2:
-                    FC.exibirTodos(manager.jogos);
+                    FC.exibirTodos(manager.jogos, manager.pessoas, manager.vendas, manager.vendasCadastradas);
                     break;
 
                 
                 case 3:
-                    FC.ExibirUm(manager.jogos);
+                    FC.exibirUm(manager.jogos, manager.pessoas, manager.vendas, 1);
                     break;
 
                 
                 case 4:
-                    FC.alterar(manager.jogos, manager.pessoas, manager.vendas, jogosCadastrados, 1);
+                    FC.alterar(manager.jogos, manager.pessoas, manager.vendas, jogosCadastrados);
                     break;
 
                 case 5:
+                    FC.remover(manager.jogos, manager.pessoas, manager.vendas, jogosCadastrados, 1);
                     break;
 
                 
                 case 6:
-                    FC.relatorioJogo(manager.jogos);
+                    FC.relatorio(manager.jogos, manager.pessoas, manager.vendas, 1);
                     break;
 
                 
                 case 7:
-                    //FC.salvar(manager);
+                    //Salvar;
                     return;
             }
         }
