@@ -20,19 +20,30 @@ class funcoes : public GeneralFunctions{
             if(option == 1){
                 jogo newgame = newgame.AdicionarJogo(jogos, Cadastrados);
                 jogos.push_back(newgame);
-                Cadastrados += 1;
             }
             else if(option == 2){
                 //Criar usuario
             }
             else if(option == 3){
                 //Criar venda
+                bool ();
+
+                venda newsale = newsale;
             }
             
         }
 
         void remover(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int cadastrados, int option){
-
+            if(option == 1){
+                jogo newgame;
+                newgame.removerJogo(jogos, cadastrados);
+            }
+            else if(option == 2){
+                //Remover usuario
+            }
+            else if(option == 3){
+                //Remover venda
+            }
         }
 
         void alterar(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option){
@@ -43,11 +54,11 @@ class funcoes : public GeneralFunctions{
             }
 
             else if(option == 2){
-                //Criar usuario
+                //Alterar usuario
             }
 
             else if(option == 3){
-                //Criar venda
+                //Alterar venda
             }
         }
 
@@ -59,11 +70,11 @@ class funcoes : public GeneralFunctions{
             }
 
             else if(option == 2){
-                //Criar usuario
+                //Exibir usuario
             }
 
             else if(option == 3){
-                //Criar venda
+                //Exibir venda
             }
         }
 

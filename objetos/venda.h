@@ -28,7 +28,32 @@ class venda{
             jogosComprados = _jogosComprados;
         }
 
-        void relatorioSimples(){
+        float calValorTotal (vector<jogo> &precojogo, vector<int> jogosComprados){
+            valorTotal = 0.0;
+
+            for (int n : jogosComprados){
+                valorTotal += precojogo[jogosComprados[n]].valor;
+            }
+            
+            return valorTotal;
+        }
+
+        void adicionarVenda(){
+            cout << "Digite o ID da venda: \n";
+            cin >> ID;
+            cout << "Digite o ID do comprador: \n";
+            cin >> IDComprador;
+            
+            cout << "Digite o valor total da compra: \n";
+            
+            
+            cout << "Digite a data da compra: \n";
+            cin >> dataCompra.dia >> dataCompra.mes >> dataCompra.ano;
+            
+
+        }
+
+        void relatorioSimples(){ 
             cout << ID << "\t" << IDComprador << "\t" << valorTotal << "\t" << dataCompra.Exibir() << "\t" << jogosComprados.size() << "\n";
 
         }

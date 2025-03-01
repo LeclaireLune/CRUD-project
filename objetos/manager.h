@@ -38,7 +38,7 @@ class Manager{
                     break;
                 
                 case 2:
-                    FC.exibirTodos(manager.jogos, manager.pessoas, manager.vendas, manager.vendasCadastradas);
+                    FC.exibirTodos(manager.jogos, manager.pessoas, manager.vendas, 1);
                     break;
 
                 
