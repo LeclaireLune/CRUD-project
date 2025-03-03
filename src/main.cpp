@@ -23,7 +23,7 @@ int main(){
         switch(rsp){
             case 1:
                 //Realizar venda
-                manager.FC.adicionar(manager.jogos, manager.pessoas, manager.vendas, manager.vendasCadastradas, 3);
+                manager.FC.adicionar(manager.jogos, manager.pessoas, manager.vendas, manager.vendasCadastradas, 3, manager.proximoIdVenda);
                 break;
             case 2:
                 //Controle Estoque

@@ -20,7 +20,7 @@ $(TARGET): $(OBJS)
 
 # Como compilar cada arquivo .cpp  em .o
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp | $(OBJDIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+		$(CC) $(CFLAGS) -c $< -o $@
 
 # Limpeza
 clean:

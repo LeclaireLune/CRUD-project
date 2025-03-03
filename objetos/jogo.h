@@ -37,12 +37,13 @@ class jogo{
         }
 
         int ProcurarIdJogo(vector<jogo> &jogos, string Nome){
-            int idEncontrado = -1;
+            int idEncontrado = -1, i = 0;
 
             for (jogo n : jogos){
                 if(n.nome == Nome){
-                        idEncontrado = n.numID;
+                        idEncontrado = i;
                 }
+                i++;
             }
 
             return idEncontrado;
@@ -110,19 +111,17 @@ class jogo{
     
                     idEncontrado = ProcurarIdJogo(jogos, Nome);
     
-                    if(idEncontrado == -1){
-                        while(idEncontrado == -1){
-                            cout << "Não foi encontrado, tentar novamente? (s/n) ";
-                            cin >> tentarDenovo;
-                            if(tentarDenovo == 's'){
-                                cout << "Qual o nome do jogo a ser removido? ";
-                                GF.LimparBuffer();
-                                getline(cin, Nome);
-                                idEncontrado = ProcurarIdJogo(jogos, Nome);
-                            }
-                            else{
-                                return;
-                            }
+                    while(idEncontrado == -1){
+                        cout << "Não foi encontrado, tentar novamente? (s/n) ";
+                        GF.ChecarTipoErrado(tentarDenovo);
+                        if(tentarDenovo == 's'){
+                            cout << "Qual o nome do jogo a ser removido? ";
+                            GF.LimparBuffer();
+                            getline(cin, Nome);
+                            idEncontrado = ProcurarIdJogo(jogos, Nome);
+                        }
+                        else{
+                            return;
                         }
                     }
     
@@ -149,6 +148,7 @@ class jogo{
                 cin >> removerMais;
                 if(removerMais == 's'){
                     system("clear");
+                    continue;
                 }
                 else{
                     break;
@@ -156,10 +156,11 @@ class jogo{
             }
         }
 
-        jogo AdicionarJogo(vector<jogo> &jogos, int cadastrados){
+        jogo AdicionarJogo(vector<jogo> &jogos, int &cadastrados, int &proximoId){
             string Nome, Dev;
-            int disponiveis, id, data, mes, ano;
+            int disponiveis, id, dia, mes, ano, diaMax;
             float valor;
+            date newDate;
 
             cout << "Escreva o nome do jogo: ";
         
@@ -176,27 +177,23 @@ class jogo{
             GF.LimparBuffer();
             getline(cin, Dev);
 
-            cout << "Escreva o dia do lançamento: ";
-            while(!(cin >> data) || data < 1 || data > 31){
-                cout << "Opção inválida, tente novamente\n";
-                GF.LimparBuffer();
-            }
+            cout << "Escreva o ano do lançamento: ";
+            GF.ChecarTipoErrado(ano, 1900);
 
             cout << "Escreva o mes do lançamento: ";
-            while(!(cin >> mes) || mes < 1 || mes > 12){
-                cout << "Opção inválida, tente novamente\n";
-                GF.LimparBuffer();
-            }
+            GF.ChecarTipoErrado(mes, 1, 12);
 
-            cout << "Escreva o ano do lançamento: ";
-            while(!(cin >> ano) || ano < 1900){
-                cout << "Opção inválida, tente novamente\n";
-                GF.LimparBuffer();
-            }
+            diaMax = newDate.diaMax(mes);
 
-            id = cadastrados;
+            cout << "Escreva o dia do lançamento: ";
+            GF.ChecarTipoErrado(dia, 1, diaMax);
+
+            int max = 0;
+
+            id = proximoId;
+            proximoId += 1;
             cadastrados += 1;
-            jogo newgame(Nome, disponiveis, valor, id, Dev, date(data, mes, ano));
+            jogo newgame(Nome, disponiveis, valor, id, Dev, date(dia, mes, ano));
             return newgame;
         }
 
@@ -213,19 +210,17 @@ class jogo{
 
                     idEncontrado = ProcurarIdJogo(jogos, Nome);
 
-                    if(idEncontrado == -1){
-                        while(idEncontrado == -1){
-                            cout << "Não foi encontrado, tentar novamente(s/n)? ";
-                            GF.ChecarTipoErrado(tentarDenovo);
-                            if(tentarDenovo == 's'){
-                                cout << "Qual o nome do jogo a ser alterado? ";
-                                GF.LimparBuffer();
-                                getline(cin, Nome);
-                                idEncontrado = ProcurarIdJogo(jogos, Nome);
-                            }
-                            else{
-                                return;
-                            }
+                    while(idEncontrado == -1){
+                        cout << "Não foi encontrado, tentar novamente(s/n)? ";
+                        GF.ChecarTipoErrado(tentarDenovo);
+                        if(tentarDenovo == 's'){
+                            cout << "Qual o nome do jogo a ser alterado? ";
+                            GF.LimparBuffer();
+                            getline(cin, Nome);
+                            idEncontrado = ProcurarIdJogo(jogos, Nome);
+                        }
+                        else{
+                            return;
                         }
                     }
 
@@ -266,28 +261,19 @@ class jogo{
                         break;
 
                     case 5:
-                        cout << "Escreva o novo dia: ";
-                        while(!(cin >> jogos[idEncontrado].dataLançamento.dia) || jogos[idEncontrado].dataLançamento.dia < 1 || jogos[idEncontrado].dataLançamento.dia > 31){
-                            cout << "Opção inválida, tente novamente\n";
-                            GF.LimparBuffer();
-                        }
-
-                        cout << "Escreva o novo mês: ";
-                        while(!(cin >> jogos[idEncontrado].dataLançamento.mes) || jogos[idEncontrado].dataLançamento.mes < 1 || jogos[idEncontrado].dataLançamento.mes > 31){
-                            cout << "Opção inválida, tente novamente\n";
-                            GF.LimparBuffer();
-                        }
+                        int max = 0;
 
                         cout << "Escreva o novo ano: ";
-                        while(!(cin >> jogos[idEncontrado].dataLançamento.ano) || jogos[idEncontrado].dataLançamento.ano < 1900){
-                            cout << "Opção inválida, tente novamente\n";
-                            GF.LimparBuffer();
-                        }
-                        break;
+                        GF.ChecarTipoErrado(jogos[idEncontrado].dataLançamento.ano, 1900);
 
-                    default:
-                        break;
-                        
+                        cout << "Escreva o novo mês: ";
+                        GF.ChecarTipoErrado(jogos[idEncontrado].dataLançamento.mes, 1, 12);
+
+                        max = jogos[idEncontrado].dataLançamento.diaMax(jogos[idEncontrado].dataLançamento.mes);
+
+                        cout << "Escreva o novo dia: ";
+                        GF.ChecarTipoErrado(jogos[idEncontrado].dataLançamento.dia, 1, max);
+                        break;     
                 }
 
                 cout << "Deseja alterar mais algum jogo? (s/n)\n";
@@ -295,6 +281,7 @@ class jogo{
                 
                 if(alterarMais == 's'){
                     system("clear");
+                    continue;
                 }
                 else{
                     break;
