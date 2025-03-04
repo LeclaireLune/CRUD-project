@@ -37,7 +37,7 @@ class Manager{
 
             switch(rsp){
                 case 1:
-                    FC.adicionar(manager.jogos, manager.pessoas, manager.vendas, manager.vendasCadastradas, 1, manager.proximoIdJogos);
+                    FC.adicionar(manager.jogos, manager.pessoas, manager.vendas, manager.jogosCadastrados, 1, manager.proximoIdJogos);
                     break;
                 
                 case 2:

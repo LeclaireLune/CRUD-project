@@ -4,9 +4,14 @@
 
 using namespace std;
 
+void salvarDados(Manager &manager);
+void carregarDados(Manager &manager);
+
 int main(){
     //Carregar as informações salvas se tiver
     Manager manager;
+    
+    carregarDados(manager);
 
     while(1){
         int rsp;
@@ -31,8 +36,8 @@ int main(){
                 break;
 
             case 3:
-                manager.FC.exibirTodos(manager.jogos, manager.pessoas, manager.vendas, 3);
                 //Listar todas
+                manager.FC.exibirTodos(manager.jogos, manager.pessoas, manager.vendas, 3);
                 break;
 
             case 4:
@@ -55,9 +60,20 @@ int main(){
                 //Break
                 break;
         }
+
+        cout << "Salvando as informações...";
+        break;
     }
 
-    //Salvar as informações
-
+    salvarDados(manager);
+    
     return 0;
+}
+
+void salvarDados(Manager &manager){
+
+}
+
+void carregarDados(Manager &manager){
+
 }

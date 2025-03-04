@@ -16,7 +16,7 @@ using namespace std;
 class funcoes : public GeneralFunctions{ 
     public:
 
-        void adicionar(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int &Cadastrados, int option, int proximoId){
+        void adicionar(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int &Cadastrados, int option, int &proximoId){
             if(option == 1){
                 jogo newgame = newgame.AdicionarJogo(jogos, Cadastrados, proximoId);
                 jogos.push_back(newgame);
@@ -30,7 +30,7 @@ class funcoes : public GeneralFunctions{
                 venda newsale;
                 newsale = newsale.adicionarVenda(jogos, usuarios, vendas, proximoId);
                 if(newsale.ID == -1){
-                    //Venda não pode ser concluída
+                    //Venda não pôde ser concluída
                 }
                 else{
                     vendas.push_back(newsale);
@@ -49,7 +49,8 @@ class funcoes : public GeneralFunctions{
                 newuser.removerUsuario(usuarios);
             }
             else if(option == 3){
-                
+                venda tempVenda;
+                tempVenda.removerVenda(vendas, cadastrados);
             }
         }
 
@@ -65,7 +66,8 @@ class funcoes : public GeneralFunctions{
             }
 
             else if(option == 3){
-                //Alterar venda
+                venda temp;
+                temp.alterarVendas(vendas, jogos);
             }
         }
 
@@ -98,7 +100,8 @@ class funcoes : public GeneralFunctions{
             }
 
             else if(option == 3){
-                //Criar venda
+                venda temp;
+                temp.relatorioVendas(vendas);
             }
         }
 

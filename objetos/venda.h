@@ -40,66 +40,115 @@ class venda{
             return valorTotal;
         }
 
+        void alterarListaJogos(vector<jogo> &jogosAlterar, vector<jogo> &jogos){
+            char tempRsp;
+            string tempJogoComprado;
+            int id_jogo;
+            jogo tempJogo;
+
+            while(1){
+                int quantidade = 0;
+                system("clear");
+
+                for(jogo n : jogosAlterar){
+                    cout << quantidade << " | ";
+                    cout << n.nome << "\n";
+                    quantidade++;
+                }
+
+                cout << "Deseja adicionar mais um item, remover ou continuar? (a/r/c): ";
+                GF.ChecarTipoErrado(tempRsp);
+
+                if(tempRsp == 'a'){
+                    cout << "Digite o nome do produto a comprar: ";
+                    GF.LimparBuffer();
+                    getline(cin, tempJogoComprado);
+                    id_jogo = tempJogo.ProcurarIdJogo(jogos, tempJogoComprado);
+        
+                    while(id_jogo == -1){
+                        cout << "Jogo não encontrado, tentar novamente? (s/n): ";
+                        GF.ChecarTipoErrado(tempRsp);
+                        if(tempRsp == 's'){
+                            cout << "Qual o nome do produto a comprar: ";
+                            GF.LimparBuffer();
+                            getline(cin, tempJogoComprado);
+                            id_jogo = tempJogo.ProcurarIdJogo(jogos, tempJogoComprado);
+                        }
+                        else{
+                            break;
+                        }
+                    }
+
+                    if(id_jogo != -1){
+                        cout << "Jogo adicionado: " << jogos[id_jogo].nome << "\n";
+                        jogosAlterar.push_back(jogos[id_jogo]);
+                        jogos[id_jogo].disponiveis -= 1;
+                        cout << "Aperte enter para continuar";
+                        cin.get();
+                    }
+
+                    else{
+                        cout << "Problema para adicionar o jogo\n";
+                        cout << "Aperte enter para continuar";
+                        cin.get();
+                    }
+                }
+
+                else if(tempRsp == 'r'){
+                    int id_remover, i = 0;
+                    for(jogo n : jogosAlterar){
+                        cout << i << " | ";
+                        n.relatorio();
+                        i++;
+                    }
+
+                    cout << "digite o id do item que deseja remover: ";
+                    GF.ChecarTipoErrado(id_remover, 0, jogosAlterar.size() - 1);
+                    for(jogo n : jogos){
+                        if(jogosAlterar[id_remover].nome == n.nome){
+                            n.disponiveis += 1;
+                        }
+                    }
+
+                    jogosAlterar.erase(jogosAlterar.begin() + id_remover);
+                }
+                else{
+                    break;
+                }
+            }
+        }
+
         void criarListaJogos(vector<jogo> &jogosComprados, vector<jogo> &jogos){
             string tempJogoComprado;
             char tempRsp;
             int id_jogo;
             jogo tempJogo;
 
-            while(1){
-                cout << "Digite o nome do produto a comprar: ";
-                cin.ignore();
-                GF.LimparBuffer();
-                getline(cin, tempJogoComprado);
-                id_jogo = tempJogo.ProcurarIdJogo(jogos, tempJogoComprado);
+            cout << "Digite o nome do produto a comprar: ";
+            getline(cin, tempJogoComprado);
+            id_jogo = tempJogo.ProcurarIdJogo(jogos, tempJogoComprado);
 
-                while(id_jogo == -1){
-                    cout << "Jogo não encontrado, tentar novamente? (s/n): ";
-                    GF.ChecarTipoErrado(tempRsp);
-                    if(tempRsp == 's'){
-                        cout << "Qual o nome do produto a comprar: ";
-                        GF.LimparBuffer();
-                        getline(cin, tempJogoComprado);
-                        id_jogo = tempJogo.ProcurarIdJogo(jogos, tempJogoComprado);
-                    }
-                    else{
-                        break;
-                    }
+            while(id_jogo == -1){
+                cout << "Jogo não encontrado, tentar novamente? (s/n): ";
+                GF.ChecarTipoErrado(tempRsp);
+                if(tempRsp == 's'){
+                    cout << "Qual o nome do produto a comprar: ";
+                    GF.LimparBuffer();
+                    getline(cin, tempJogoComprado);
+                    id_jogo = tempJogo.ProcurarIdJogo(jogos, tempJogoComprado);
                 }
-                
-                if(id_jogo != -1){
-                    jogosComprados.push_back(jogos[id_jogo]);
-                    jogos[id_jogo].disponiveis -= 1;
-                }
-                
-                while(1){
-
-                    cout << "Deseja adicionar mais um item, remover ou continuar? (a/r/c): ";
-                    GF.ChecarTipoErrado(tempRsp);
-
-                    if(tempRsp == 'a'){
-                        break;
-                    }
-                    else if(tempRsp == 'r'){
-                        int id_remover, i = 0;
-                        for(jogo n : jogosComprados){
-                            cout << i << " | ";
-                            n.relatorio();
-                            i++;
-                        }
-    
-                        cout << "digite o id de qual deseja remover: ";
-                        GF.ChecarTipoErrado(id_remover, 0, jogosComprados.size());
-                        jogosComprados.erase(jogosComprados.begin() + id_remover);
-                    }
-                    else{
-                        break;
-                    }
-                }
-                if(tempRsp == 'c'){                
+                else{
                     break;
                 }
             }
+            
+            if(id_jogo != -1){
+                cout << "Jogo adicionado: " << jogos[id_jogo].nome << "\n";
+                jogosComprados.push_back(jogos[id_jogo]);
+                jogos[id_jogo].disponiveis -= 1;
+            }
+            
+            alterarListaJogos(jogosComprados, jogos);
         }
         
         void relatorioSimples(){
@@ -172,11 +221,48 @@ class venda{
                 return tempVenda;
             }
             else{
-
+                alterarUmaVenda(tempVenda, jogos);
+                proximoId += 1;
+                return tempVenda;
             }
         }
 
-        void alterarUmaVenda(vector<venda> &vendas){
+        void alterarUmaVenda(venda &venda, vector<jogo> &jogos){
+            char alterarMais;
+            int rsp;
+            string _nomeComprador;
+            while(1){
+                cout << "\nO que deseja alterar? (Outro para cancelar)\n1.Comprador\n2.Lista de Itens\n";
+                GF.ChecarTipoErrado(rsp);
+
+                switch (rsp){
+                    case 1:
+                        cout << "Escreva o nome do novo comprador: ";
+                        GF.LimparBuffer();
+                        getline(cin, _nomeComprador);
+                        break;
+                    
+                    case 2:
+                        GF.LimparBuffer();
+                        alterarListaJogos(venda.itens, jogos);
+                        break;   
+                }
+
+                cout << "Deseja alterar mais alguma informação? (s/n)\n";
+                GF.ChecarTipoErrado(alterarMais);
+                
+                if(alterarMais == 's'){
+                    system("clear");
+                    continue;
+                }
+                else{
+                    venda.valorTotal = venda.calValorTotal(venda.itens);
+                    break;
+                }
+            }
+        }
+
+        void alterarVendas(vector<venda> &vendas, vector<jogo> &jogos){
             int idEncontrado = -1, id;
             char tentarDenovo;
 
@@ -211,7 +297,7 @@ class venda{
                     }
                 }
 
-                
+                alterarUmaVenda(vendas[idEncontrado], jogos);
             }
 
             else{
@@ -288,14 +374,78 @@ class venda{
 
         void relatorioVendas(vector<venda> &vendas){
             int quantidade = 0, QuantidadeProdutos = 0;
-            float valorTotal = 0;
+            float valorTotal = 0.00;
+
+            if(vendas.size() == 0){
+                cout << "Não há vendas cadastradas\n";
+                cout << "Aperte enter para continuar\n";
+                GF.LimparBuffer();
+                cin.get();
+                return;
+            }
 
             for(venda n : vendas){
                 quantidade += 1;
                 QuantidadeProdutos += n.itens.size();
                 valorTotal += n.valorTotal;
             }
+
+            cout << "Quantidade de vendas: " << quantidade;
+            cout << " | Quantidade de produtos vendidos: " << QuantidadeProdutos;
+            cout << " | Receita Total: " << valorTotal << "\n";
+
+            cout << "Aperte enter para continuar\n";
+            GF.LimparBuffer();
+            cin.get();
         }
+
+        void removerVenda(vector<venda> &vendas, int &cadastrados){
+            while(1){
+                string Nome;
+                int rsp, id_escolhido, quantidade = 0;
+                char tentarDenovo, removerMais, correto;
+
+                if(vendas.size() != 0){
+
+                    for(venda n : vendas){
+                        cout << quantidade << " | ";
+                        n.relatorioSimples();
+                        quantidade++;
+                    }
+
+                    cout << "Qual o id da venda a ser removida? ";
+                    GF.ChecarTipoErrado(id_escolhido, 0, vendas.size() - 1);
+    
+                    vendas[id_escolhido].relatorioCompleto();
+                }
+                else{
+                    cout << "Não há vendas cadastrados\n";
+                    cout << "Aperte enter para continuar\n";
+                    GF.LimparBuffer();
+                    cin.get();
+                    return;
+                }
+
+                cout << "É a venda correta? (s/n) ";
+                GF.ChecarTipoErrado(correto);
+
+                if(correto == 's'){
+                    vendas.erase(vendas.begin() + id_escolhido);
+                    cout << "Venda deletada com sucesso!\n";
+                    cadastrados -= 1;
+                }
+
+                cout << "Deseja deletar outra? (s/n) ";
+                cin >> removerMais;
+                if(removerMais == 's'){
+                    system("clear");
+                    continue;
+                }
+                else{
+                    break;
+                }
+            }
+        }    
 
 };
 

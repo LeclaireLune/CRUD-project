@@ -41,7 +41,7 @@ class jogo{
 
             for (jogo n : jogos){
                 if(n.nome == Nome){
-                        idEncontrado = i;
+                    idEncontrado = i;
                 }
                 i++;
             }
