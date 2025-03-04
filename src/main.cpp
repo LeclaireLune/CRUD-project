@@ -1,17 +1,29 @@
-#include <iostream>
+//Variáveis globais para formatação das tabelas
+int MAXNOMEJOGO = 15;
+int MAXNOMEDEV = 15;
 
 #include "../objetos/manager.h"
+#include "../objetos/save_load.h"
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
-void salvarDados(Manager &manager);
-void carregarDados(Manager &manager);
 
 int main(){
     //Carregar as informações salvas se tiver
     Manager manager;
-    
-    carregarDados(manager);
+    save_load sl;
+    ifstream LoadFile("estoque.crud");
+
+    if(!LoadFile){
+        cout << "Problema ao abrir arquivo de estoque\n";
+        return {};
+    }
+    else{
+        sl.carregarJogos(manager.jogos, LoadFile);
+        LoadFile.close();
+    }
 
     while(1){
         int rsp;
@@ -20,10 +32,7 @@ int main(){
         cout << "Sistema de Controle\n";
         cout << "Escolha uma das opções\n";
         cout << "1.Realizar venda\n2.Controle Estoque\n3.Listar todas\n4.Exibir uma\n5.Alterar\n6.Remover\n7.Exibir Relatório\n8.Sair\n";
-        while(!(cin >> rsp) || rsp < 1 || rsp > 8){
-            cout << "Opção inválida, tente novamente\n";
-            manager.FC.LimparBuffer();
-        }
+        GF.ChecarTipoErrado(rsp, 1, 8);
 
         switch(rsp){
             case 1:
@@ -57,23 +66,24 @@ int main(){
                 manager.FC.relatorio(manager.jogos, manager.pessoas, manager.vendas, 3);
                 break;
             case 8:
-                //Break
+                //Salvar
+                ofstream saveFile("estoque.crud");
+                if(!saveFile){
+                    cout << "Problema ao abrir arquivo de estoque\n";
+                    continue;
+                }
+                else{
+                    cout << "Salvando as informações...\n";
+
+                    sl.salvarJogos(manager.jogos, saveFile);
+                    saveFile.close();
+
+                    cout << "Dados salvos\n";
+                    return 0;
+                }
                 break;
         }
-
-        cout << "Salvando as informações...";
-        break;
     }
 
-    salvarDados(manager);
-    
     return 0;
-}
-
-void salvarDados(Manager &manager){
-
-}
-
-void carregarDados(Manager &manager){
-
 }

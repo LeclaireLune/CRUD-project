@@ -13,12 +13,16 @@ class Manager{
         vector<jogo> jogos;
         vector<venda> vendas;
         vector<usuario> pessoas;
+
         int jogosCadastrados = 0;
         int vendasCadastradas = 0;
         int pessoasCadastradas = 0;
+
         int proximoIdVenda = 0;
         int proximoIdJogos = 0;
         int proximoIdPessoas = 0;
+
+        int tamMaxNome = 15;
         funcoes FC;
 
     void EstoqueMenu(Manager &manager){

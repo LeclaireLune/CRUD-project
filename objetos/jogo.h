@@ -5,6 +5,14 @@
 #include "date.h"
 #include <vector>
 #include <algorithm>
+#include <iomanip>
+
+#define W_NOME 30
+#define W_DISP 15
+#define W_VALOR 10
+#define W_ID 10
+#define W_DEV 15
+#define W_DATA 15
 
 GeneralFunctions GF;
 
@@ -31,8 +39,13 @@ class jogo{
             dataLançamento = lançamento;
         }
 
-        void relatorio(){
-            cout << numID << "\t" << nome << "\t" << valor << "\t" << desenvolvedor << "\t" << disponiveis << "\t";
+        void cabecalhoRelatorio(int maiorNome, int maiorDev){
+            cout << left << setw(W_ID) << "ID" << setw(maiorNome) << "Nome" << setw(W_VALOR) << "Valor" << setw(maiorDev) << "Desenvolvedor" << setw(W_DISP) << "Disponiveis" <<  setw(W_DATA) << "Lançamento" << endl;
+        }
+
+        void relatorio(int maiorNome, int maiorDev){
+            cout << left << setw(W_ID) << numID << setw(maiorNome) << nome << setw(W_VALOR) << fixed << setprecision(2) << valor << setw(maiorDev) << desenvolvedor << setw(W_DISP) << disponiveis;
+            
             dataLançamento.Exibir();
         }
 
@@ -72,7 +85,11 @@ class jogo{
                     return;
                 }
 
-                jogos[idEncontrado].relatorio();  
+                int maiorNome = (int)jogos[idEncontrado].nome.size() + 2;
+                int maiorDev = (int)jogos[idEncontrado].desenvolvedor.size() + 2;
+
+                cabecalhoRelatorio(maiorNome, maiorDev);
+                jogos[idEncontrado].relatorio(maiorNome, maiorDev);  
             }
             else{
                 cout << "Não há jogos cadastrados\n";
@@ -88,8 +105,9 @@ class jogo{
                 cout << "Não há jogos cadastrados\n";
             }
             else{
+                cabecalhoRelatorio(MAXNOMEJOGO, MAXNOMEDEV);
                 for (jogo n : jogos){
-                    n.relatorio();
+                    n.relatorio(MAXNOMEJOGO, MAXNOMEDEV);
                 }
             }
 
@@ -124,8 +142,12 @@ class jogo{
                             return;
                         }
                     }
-    
-                    jogos[idEncontrado].relatorio();
+
+                    int maiorNome = (int)jogos[idEncontrado].nome.size() + 2;
+                    int maiorDev = (int)jogos[idEncontrado].desenvolvedor.size() + 2;
+
+                    cabecalhoRelatorio(maiorNome, maiorDev);
+                    jogos[idEncontrado].relatorio(maiorNome, maiorDev);
                 }
                 else{
                     cout << "Não há jogos cadastrados\n";
@@ -188,11 +210,13 @@ class jogo{
             cout << "Escreva o dia do lançamento: ";
             GF.ChecarTipoErrado(dia, 1, diaMax);
 
-            int max = 0;
-
             id = proximoId;
+
             proximoId += 1;
             cadastrados += 1;
+            MAXNOMEJOGO = max(MAXNOMEJOGO, (int)Nome.size() + 2);
+            MAXNOMEDEV = max(MAXNOMEDEV, (int)Dev.size() + 2);
+
             jogo newgame(Nome, disponiveis, valor, id, Dev, date(dia, mes, ano));
             return newgame;
         }
@@ -224,7 +248,11 @@ class jogo{
                         }
                     }
 
-                    jogos[idEncontrado].relatorio();  
+                    int maiorNome = (int)jogos[idEncontrado].nome.size() + 2;
+                    int maiorDev = (int)jogos[idEncontrado].nome.size() + 2;
+                    
+                    cabecalhoRelatorio(maiorNome, maiorDev);
+                    jogos[idEncontrado].relatorio(maiorNome, maiorDev);  
                 }
                 else{
                     cout << "Não há jogos cadastrados\n";
@@ -242,6 +270,7 @@ class jogo{
                         cout << "Escreva o novo nome: ";
                         GF.LimparBuffer();
                         getline(cin,jogos[idEncontrado].nome);
+                        MAXNOMEJOGO = max(MAXNOMEJOGO, (int)jogos[idEncontrado].nome.size() + 2);
                         break;
                     
                     case 2:
@@ -258,6 +287,7 @@ class jogo{
                         cout << "Escreva o novo desenvolvedor: ";
                         GF.LimparBuffer();
                         getline(cin, jogos[idEncontrado].desenvolvedor);
+                        MAXNOMEDEV = max(MAXNOMEDEV, (int)jogos[idEncontrado].desenvolvedor.size() + 2);
                         break;
 
                     case 5:

@@ -96,9 +96,11 @@ class venda{
 
                 else if(tempRsp == 'r'){
                     int id_remover, i = 0;
+
+                    tempJogo.cabecalhoRelatorio(MAXNOMEJOGO, MAXNOMEDEV);
                     for(jogo n : jogosAlterar){
                         cout << i << " | ";
-                        n.relatorio();
+                        n.relatorio(MAXNOMEJOGO, MAXNOMEDEV);
                         i++;
                     }
 
