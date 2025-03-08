@@ -23,7 +23,7 @@ class funcoes : public GeneralFunctions{
             }
             else if(option == 2){
                 usuario newuser;
-                newuser.adicionarUsuario();
+                newuser.adicionarUsuario(usuarios, Cadastrados, proximoId);
                 usuarios.push_back(newuser);
             }
             else if(option == 3){
@@ -54,7 +54,7 @@ class funcoes : public GeneralFunctions{
             }
         }
 
-        void alterar(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option){
+        void alterar(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option, int cadastrados, int proximoID){
             if(option == 1){
                 jogo temp;
                 temp.alterarJogo(jogos);
@@ -62,16 +62,19 @@ class funcoes : public GeneralFunctions{
             }
 
             else if(option == 2){
-                //Alterar usuario
+                usuario temp;
+                temp.adicionarUsuario(usuarios, cadastrados, proximoID);
+                return;
             }
 
             else if(option == 3){
                 venda temp;
                 temp.alterarVendas(vendas, jogos, usuarios);
+                return;
             }
         }
 
-        void exibirTodos(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option){
+        void exibirTodos(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option, int id){
             if(option == 1){
                 jogo temp;
                 temp.exibirTodosJogos(jogos);
@@ -79,12 +82,15 @@ class funcoes : public GeneralFunctions{
             }
 
             else if(option == 2){
-                //Exibir usuario
+                usuario temp;
+                temp.exibirTodosUsuario(usuarios);
+                return;
             }
 
             else if(option == 3){
                 venda temp;
                 temp.exibirTodasVendas(vendas);
+                return;
             }
         }
 
@@ -96,16 +102,19 @@ class funcoes : public GeneralFunctions{
             }
 
             else if(option == 2){
-                //Criar usuario
+                usuario temp;
+                temp.relatorioUsuario(usuarios);
+                return;
             }
 
             else if(option == 3){
                 venda temp;
                 temp.relatorioVendas(vendas);
+                return;
             }
         }
 
-        void exibirUm(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option){
+        void exibirUm(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option, int id){
             if(option == 1){
                 jogo temp;
                 temp.exibirUm(jogos);
@@ -113,12 +122,15 @@ class funcoes : public GeneralFunctions{
             }
 
             else if(option == 2){
-                //Criar usuario
+                usuario temp;
+                temp.exibirUmUsuario(usuarios, id);
+                return;
             }
 
             else if(option == 3){
                 venda temp;
                 temp.exibirUmaVenda(vendas, usuarios);
+                return;
             }
         }
             
