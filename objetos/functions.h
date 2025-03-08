@@ -16,19 +16,25 @@ using namespace std;
 class funcoes : public GeneralFunctions{ 
     public:
 
-        void adicionar(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int &Cadastrados, int option){
+        void adicionar(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int &Cadastrados, int option, int &proximoId){
             if(option == 1){
-                jogo newgame = newgame.AdicionarJogo(jogos, Cadastrados);
+                jogo newgame = newgame.AdicionarJogo(jogos, Cadastrados, proximoId);
                 jogos.push_back(newgame);
             }
             else if(option == 2){
-                //Criar usuario
+                usuario newuser;
+                newuser.adicionarUsuario(usuarios, Cadastrados, proximoId);
+                usuarios.push_back(newuser);
             }
             else if(option == 3){
-                //Criar venda
-                bool ();
-
-                venda newsale = newsale;
+                venda newsale;
+                newsale = newsale.adicionarVenda(jogos, usuarios, vendas, proximoId);
+                if(newsale.ID == -1){
+                    //Venda não pôde ser concluída
+                }
+                else{
+                    vendas.push_back(newsale);
+                }
             }
             
         }
@@ -39,14 +45,16 @@ class funcoes : public GeneralFunctions{
                 newgame.removerJogo(jogos, cadastrados);
             }
             else if(option == 2){
-                //Remover usuario
+                usuario newuser;
+                newuser.removerUsuario(usuarios);
             }
             else if(option == 3){
-                //Remover venda
+                venda tempVenda;
+                tempVenda.removerVenda(vendas, usuarios, jogos ,cadastrados);
             }
         }
 
-        void alterar(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option){
+        void alterar(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option, int cadastrados, int proximoID){
             if(option == 1){
                 jogo temp;
                 temp.alterarJogo(jogos);
@@ -54,15 +62,19 @@ class funcoes : public GeneralFunctions{
             }
 
             else if(option == 2){
-                //Alterar usuario
+                usuario temp;
+                temp.adicionarUsuario(usuarios, cadastrados, proximoID);
+                return;
             }
 
             else if(option == 3){
-                //Alterar venda
+                venda temp;
+                temp.alterarVendas(vendas, jogos, usuarios);
+                return;
             }
         }
 
-        void exibirTodos(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option){
+        void exibirTodos(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option, int id){
             if(option == 1){
                 jogo temp;
                 temp.exibirTodosJogos(jogos);
@@ -70,11 +82,15 @@ class funcoes : public GeneralFunctions{
             }
 
             else if(option == 2){
-                //Exibir usuario
+                usuario temp;
+                temp.exibirTodosUsuario(usuarios);
+                return;
             }
 
             else if(option == 3){
-                //Exibir venda
+                venda temp;
+                temp.exibirTodasVendas(vendas);
+                return;
             }
         }
 
@@ -86,15 +102,19 @@ class funcoes : public GeneralFunctions{
             }
 
             else if(option == 2){
-                //Criar usuario
+                usuario temp;
+                temp.relatorioUsuario(usuarios);
+                return;
             }
 
             else if(option == 3){
-                //Criar venda
+                venda temp;
+                temp.relatorioVendas(vendas);
+                return;
             }
         }
 
-        void exibirUm(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option){
+        void exibirUm(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option, int id){
             if(option == 1){
                 jogo temp;
                 temp.exibirUm(jogos);
@@ -102,11 +122,15 @@ class funcoes : public GeneralFunctions{
             }
 
             else if(option == 2){
-                //Criar usuario
+                usuario temp;
+                temp.exibirUmUsuario(usuarios, id);
+                return;
             }
 
             else if(option == 3){
-                //Criar venda
+                venda temp;
+                temp.exibirUmaVenda(vendas, usuarios);
+                return;
             }
         }
             

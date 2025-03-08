@@ -20,10 +20,43 @@ class date{
             ano = a;
         }
 
+        int diaMax(int mes){
+            switch(mes){
+                case 4:
+                case 6:
+                case 9:
+                case 11:
+                    return 30;
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                case 8:
+                case 10:
+                case 12:
+                    return 31;
+                case 2:
+                    return 28;
+                default:
+                    return 31;
+            }
+        }
+
         std::string Exibir(){
+            string _dia = to_string(dia);
+            string _mes = to_string(mes);
+            string _ano = to_string(ano);
             std::string data;
 
-            std::cout << dia << "/" << mes << "/" << ano << "\n";
+            if(dia < 10){
+                _dia = "0" + _dia;
+            }
+
+            if(mes < 10){
+                _mes = "0" + _mes;
+            }
+
+            std::cout << _dia << "/" << _mes << "/" << _ano << "\n";
 
             return data;
         }

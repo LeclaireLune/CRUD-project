@@ -5,6 +5,15 @@
 #include "date.h"
 #include <vector>
 #include <algorithm>
+#include <iomanip>
+
+//Macros da formatação da tabela
+#define W_NOME 30
+#define W_DISP 15
+#define W_VALOR 10
+#define W_ID 10
+#define W_DEV 15
+#define W_DATA 15
 
 GeneralFunctions GF;
 
@@ -31,111 +40,128 @@ class jogo{
             dataLançamento = lançamento;
         }
 
-        void relatorio(){
-            cout << numID << "\t" << nome << "\t" << valor << "\t" << desenvolvedor << "\t" << disponiveis << "\t";
+        //Print do cabeçalho da tabela
+        void cabecalhoRelatorio(int maiorNome, int maiorDev){
+            cout << left << setw(W_ID) << "ID" << setw(maiorNome) << "Nome" << setw(W_VALOR) << "Valor" << setw(maiorDev) << "Desenvolvedor" << setw(W_DISP) << "Disponiveis" <<  setw(W_DATA) << "Lançamento" << endl;
+        }
+
+        //Print da informação de cada jogo
+        void relatorio(int maiorNome, int maiorDev){
+            cout << left << setw(W_ID) << numID << setw(maiorNome) << nome << setw(W_VALOR) << fixed << setprecision(2) << valor << setw(maiorDev) << desenvolvedor << setw(W_DISP) << disponiveis;
+            
             dataLançamento.Exibir();
         }
 
-        int ProcurarIdJogo(vector<jogo> &jogos, string Nome){
-            int idEncontrado = -1;
-
+        int iterarIdJogo(vector<jogo> &jogos, string Nome){
+            int idEncontrado = -1, i = 0;
             for (jogo n : jogos){
                 if(n.nome == Nome){
-                        idEncontrado = n.numID;
+                    idEncontrado = i;
+                    return idEncontrado;
+                }
+                i++;
+            }
+            return idEncontrado;
+        }
+
+        //Retorna o id de um jogo com o mesmo nome, se encontrado
+        int ProcurarIdJogo(vector<jogo> &jogos){
+            int idEncontrado = -1, i = 0;
+            string Nome;
+            char tentarDenovo;
+
+            cout << "Qual o nome do jogo? ";
+            GF.LimparBuffer();
+            getline(cin, Nome);
+
+            idEncontrado = iterarIdJogo(jogos, Nome);
+            
+            while(idEncontrado == -1){
+                cout << "Não foi encontrado, tentar novamente(s/n)? ";
+                cin >> tentarDenovo;
+                if(tentarDenovo == 's'){
+                    cout << "Qual o nome do jogo a ser exibido? ";
+                    GF.LimparBuffer();
+                    getline(cin, Nome);
+                    idEncontrado = iterarIdJogo(jogos, Nome);
+                }
+                else{
+                    return -1;
                 }
             }
 
             return idEncontrado;
         }
 
+        //Exibe apenas um jogo de acordo com seu nome
         void exibirUm(vector<jogo> &jogos){
             int idEncontrado;
             string Nome;
             char tentarDenovo;
 
             if(jogos.size() != 0){
-                cout << "Qual o nome do jogo a ser exibido? ";
-                GF.LimparBuffer();
-                getline(cin, Nome);
+                idEncontrado = ProcurarIdJogo(jogos);
 
-                idEncontrado = ProcurarIdJogo(jogos, Nome);
-                
                 if(idEncontrado == -1){
-                    cout << "Não foi encontrado, tentar novamente(s/n)? ";
-                    cin >> tentarDenovo;
-                    if(tentarDenovo == 's'){
-                        exibirUm(jogos);
-                        return;
-                    }
-
                     return;
                 }
 
-                jogos[idEncontrado].relatorio();  
+                int maiorNome = (int)jogos[idEncontrado].nome.size() + 2;
+                int maiorDev = (int)jogos[idEncontrado].desenvolvedor.size() + 2;
+
+                cabecalhoRelatorio(maiorNome, maiorDev);
+                jogos[idEncontrado].relatorio(maiorNome, maiorDev);  
             }
             else{
                 cout << "Não há jogos cadastrados\n";
             }
 
-            cout << "Aperte enter para continuar\n";
-            GF.LimparBuffer();
-            cin.get();
+            GF.EnterContinue();
         }
 
+        //Exibir todos os jogos presente no vetor
         void exibirTodosJogos(vector<jogo> &jogos){
             if(jogos.size() == 0){
                 cout << "Não há jogos cadastrados\n";
             }
             else{
+                cabecalhoRelatorio(MAXNOMEJOGO, MAXNOMEDEV);
                 for (jogo n : jogos){
-                    n.relatorio();
+                    n.relatorio(MAXNOMEJOGO, MAXNOMEDEV);
                 }
             }
 
-            cout << "Aperte enter para continuar";
-            GF.LimparBuffer();
-            cin.get();
+            GF.EnterContinue();
         }
 
+        //Remove um jogo do vetor
         void removerJogo(vector<jogo> &jogos, int cadastrados){
             while(1){
                 string Nome;
                 int rsp, idEncontrado;
                 char tentarDenovo, removerMais, correto;
     
+                //Logica para procurar o id do jogo a ser removido
                 if(jogos.size() != 0){
-                    cout << "Qual o nome do jogo a ser removido? ";
-                    GF.LimparBuffer();
-                    getline(cin, Nome);
-    
-                    idEncontrado = ProcurarIdJogo(jogos, Nome);
-    
+                    idEncontrado = ProcurarIdJogo(jogos);
+
                     if(idEncontrado == -1){
-                        while(idEncontrado == -1){
-                            cout << "Não foi encontrado, tentar novamente? (s/n) ";
-                            cin >> tentarDenovo;
-                            if(tentarDenovo == 's'){
-                                cout << "Qual o nome do jogo a ser removido? ";
-                                GF.LimparBuffer();
-                                getline(cin, Nome);
-                                idEncontrado = ProcurarIdJogo(jogos, Nome);
-                            }
-                            else{
-                                return;
-                            }
-                        }
+                        return;
                     }
-    
-                    jogos[idEncontrado].relatorio();
+
+                    int maiorNome = (int)jogos[idEncontrado].nome.size() + 2;
+                    int maiorDev = (int)jogos[idEncontrado].desenvolvedor.size() + 2;
+
+                    cabecalhoRelatorio(maiorNome, maiorDev);
+                    jogos[idEncontrado].relatorio(maiorNome, maiorDev);
                 }
                 else{
                     cout << "Não há jogos cadastrados\n";
-                    cout << "Aperte enter para continuar\n";
-                    GF.LimparBuffer();
-                    cin.get();
+                    GF.EnterContinue();
                     return;
                 }
 
+                //Verificação se está correto a escolha
                 cout << "É o jogo correto? (s/n) ";
                 GF.ChecarTipoErrado(correto);
 
@@ -149,6 +175,7 @@ class jogo{
                 cin >> removerMais;
                 if(removerMais == 's'){
                     system("clear");
+                    continue;
                 }
                 else{
                     break;
@@ -156,11 +183,14 @@ class jogo{
             }
         }
 
-        jogo AdicionarJogo(vector<jogo> &jogos, int cadastrados){
+        //Adiciona um jogo no vetor
+        jogo AdicionarJogo(vector<jogo> &jogos, int &cadastrados, int &proximoId){
             string Nome, Dev;
-            int disponiveis, id, data, mes, ano;
+            int disponiveis, id, dia, mes, ano, diaMax;
             float valor;
+            date newDate;
 
+            //Perguntas das informações do objeto
             cout << "Escreva o nome do jogo: ";
         
             GF.LimparBuffer();
@@ -176,77 +206,66 @@ class jogo{
             GF.LimparBuffer();
             getline(cin, Dev);
 
-            cout << "Escreva o dia do lançamento: ";
-            while(!(cin >> data) || data < 1 || data > 31){
-                cout << "Opção inválida, tente novamente\n";
-                GF.LimparBuffer();
-            }
+            cout << "Escreva o ano do lançamento: ";
+            GF.ChecarTipoErrado(ano, 1900);
 
             cout << "Escreva o mes do lançamento: ";
-            while(!(cin >> mes) || mes < 1 || mes > 12){
-                cout << "Opção inválida, tente novamente\n";
-                GF.LimparBuffer();
-            }
+            GF.ChecarTipoErrado(mes, 1, 12);
 
-            cout << "Escreva o ano do lançamento: ";
-            while(!(cin >> ano) || ano < 1900){
-                cout << "Opção inválida, tente novamente\n";
-                GF.LimparBuffer();
-            }
+            diaMax = newDate.diaMax(mes);
 
-            id = cadastrados;
+            cout << "Escreva o dia do lançamento: ";
+            GF.ChecarTipoErrado(dia, 1, diaMax);
+
+            id = proximoId;
+
+            proximoId += 1;
             cadastrados += 1;
-            jogo newgame(Nome, disponiveis, valor, id, Dev, date(data, mes, ano));
+            MAXNOMEJOGO = max(MAXNOMEJOGO, (int)Nome.size() + 2);
+            MAXNOMEDEV = max(MAXNOMEDEV, (int)Dev.size() + 2);
+
+            jogo newgame(Nome, disponiveis, valor, id, Dev, date(dia, mes, ano));
             return newgame;
         }
 
+        //Alterar um jogo presente no vetor
         void alterarJogo(vector<jogo> &jogos){
             while(1){
                 string Nome;
                 int rsp, idEncontrado;
                 char tentarDenovo, alterarMais;
 
+                //logica para procurar o id do jogo
                 if(jogos.size() != 0){
-                    cout << "Qual o nome do jogo a ser alterado? ";
-                    GF.LimparBuffer();
-                    getline(cin, Nome);
-
-                    idEncontrado = ProcurarIdJogo(jogos, Nome);
+                    idEncontrado = ProcurarIdJogo(jogos);
 
                     if(idEncontrado == -1){
-                        while(idEncontrado == -1){
-                            cout << "Não foi encontrado, tentar novamente(s/n)? ";
-                            GF.ChecarTipoErrado(tentarDenovo);
-                            if(tentarDenovo == 's'){
-                                cout << "Qual o nome do jogo a ser alterado? ";
-                                GF.LimparBuffer();
-                                getline(cin, Nome);
-                                idEncontrado = ProcurarIdJogo(jogos, Nome);
-                            }
-                            else{
-                                return;
-                            }
-                        }
+                        return;
                     }
 
-                    jogos[idEncontrado].relatorio();  
+                    int maiorNome = (int)jogos[idEncontrado].nome.size() + 2;
+                    int maiorDev = (int)jogos[idEncontrado].nome.size() + 2;
+                    
+                    cabecalhoRelatorio(maiorNome, maiorDev);
+                    jogos[idEncontrado].relatorio(maiorNome, maiorDev);  
                 }
                 else{
                     cout << "Não há jogos cadastrados\n";
-                    cout << "Aperte enter para continuar\n";
-                    GF.LimparBuffer();
-                    cin.get();
+                    GF.EnterContinue();
                     return;
                 }
 
+                //Pergunta oque deseja alterar
                 cout << "O que deseja alterar?\n1.Nome\n2.Preço\n3.Disponiveis\n4.Desenvolvedor\n5.Data de lançamento\n (Outro para cancelar) ";
                 GF.ChecarTipoErrado(rsp);
 
+                //Direciona para a lógica de alterar uma informação específica de acordo com a resposta
                 switch (rsp){
                     case 1:
                         cout << "Escreva o novo nome: ";
                         GF.LimparBuffer();
                         getline(cin,jogos[idEncontrado].nome);
+                        MAXNOMEJOGO = max(MAXNOMEJOGO, (int)jogos[idEncontrado].nome.size() + 2);
                         break;
                     
                     case 2:
@@ -263,31 +282,23 @@ class jogo{
                         cout << "Escreva o novo desenvolvedor: ";
                         GF.LimparBuffer();
                         getline(cin, jogos[idEncontrado].desenvolvedor);
+                        MAXNOMEDEV = max(MAXNOMEDEV, (int)jogos[idEncontrado].desenvolvedor.size() + 2);
                         break;
 
                     case 5:
-                        cout << "Escreva o novo dia: ";
-                        while(!(cin >> jogos[idEncontrado].dataLançamento.dia) || jogos[idEncontrado].dataLançamento.dia < 1 || jogos[idEncontrado].dataLançamento.dia > 31){
-                            cout << "Opção inválida, tente novamente\n";
-                            GF.LimparBuffer();
-                        }
-
-                        cout << "Escreva o novo mês: ";
-                        while(!(cin >> jogos[idEncontrado].dataLançamento.mes) || jogos[idEncontrado].dataLançamento.mes < 1 || jogos[idEncontrado].dataLançamento.mes > 31){
-                            cout << "Opção inválida, tente novamente\n";
-                            GF.LimparBuffer();
-                        }
+                        int max = 0;
 
                         cout << "Escreva o novo ano: ";
-                        while(!(cin >> jogos[idEncontrado].dataLançamento.ano) || jogos[idEncontrado].dataLançamento.ano < 1900){
-                            cout << "Opção inválida, tente novamente\n";
-                            GF.LimparBuffer();
-                        }
-                        break;
+                        GF.ChecarTipoErrado(jogos[idEncontrado].dataLançamento.ano, 1900);
 
-                    default:
-                        break;
-                        
+                        cout << "Escreva o novo mês: ";
+                        GF.ChecarTipoErrado(jogos[idEncontrado].dataLançamento.mes, 1, 12);
+
+                        max = jogos[idEncontrado].dataLançamento.diaMax(jogos[idEncontrado].dataLançamento.mes);
+
+                        cout << "Escreva o novo dia: ";
+                        GF.ChecarTipoErrado(jogos[idEncontrado].dataLançamento.dia, 1, max);
+                        break;     
                 }
 
                 cout << "Deseja alterar mais algum jogo? (s/n)\n";
@@ -295,6 +306,7 @@ class jogo{
                 
                 if(alterarMais == 's'){
                     system("clear");
+                    continue;
                 }
                 else{
                     break;
@@ -302,6 +314,7 @@ class jogo{
             }
         }
 
+        //Cria um relatório sobre o estoque
         void relatorioJogo(vector<jogo> &jogos){
             //Quantidade jogos cadastrados, Quantidade total, valor total do estoque
             int cadastrados, quantidadeTotal = 0;
@@ -322,9 +335,7 @@ class jogo{
 
             }
 
-            cout << "Aperte enter para continuar\n";
-            GF.LimparBuffer();
-            cin.get();
+            GF.EnterContinue();
         }
 };
 #endif
