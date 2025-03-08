@@ -50,7 +50,7 @@ class funcoes : public GeneralFunctions{
             }
             else if(option == 3){
                 venda tempVenda;
-                tempVenda.removerVenda(vendas, cadastrados);
+                tempVenda.removerVenda(vendas, usuarios, jogos ,cadastrados);
             }
         }
 
@@ -67,7 +67,7 @@ class funcoes : public GeneralFunctions{
 
             else if(option == 3){
                 venda temp;
-                temp.alterarVendas(vendas, jogos);
+                temp.alterarVendas(vendas, jogos, usuarios);
             }
         }
 
@@ -118,7 +118,7 @@ class funcoes : public GeneralFunctions{
 
             else if(option == 3){
                 venda temp;
-                temp.exibirUmaVenda(vendas);
+                temp.exibirUmaVenda(vendas, usuarios);
             }
         }
             

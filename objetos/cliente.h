@@ -11,23 +11,23 @@ using namespace std;
 class usuario{
     public: 
         string nome;
-        string CPF;
+        string CPF_CNPJ;
         int numID;
-        date ultimaCompra; //adicionar o tempo
+        date ultimaCompra;
 
         usuario(){
 
         }
 
-        usuario(string n, string cpf, int id){
+        usuario(string n, string _cpf_cnpj, int id){
             nome = n;
-            CPF = cpf;
+            CPF_CNPJ = _cpf_cnpj;
             numID = id;
         }
 
-        int procurarCliente(vector<usuario> &clientes, string name){
+        int procurarCliente(vector<usuario> &clientes, string _cpf_cnpj){
             for(int i = 0; i < clientes.size(); i++){
-                if(clientes[i].nome == name){
+                if(clientes[i].CPF_CNPJ == _cpf_cnpj){
                     return i;
                 }
             }
@@ -35,7 +35,7 @@ class usuario{
         }
         
         void relatorioUser(){
-            cout << nome << "\t" << CPF << "\t" << numID;
+            cout << nome << "\t" << CPF_CNPJ << "\t" << numID;
 
         }
         
@@ -44,7 +44,7 @@ class usuario{
         getline(cin, nome);
         
         cout << "Digite o CPF: \n";
-        getline(cin, CPF);
+        getline(cin, CPF_CNPJ);
 
         cout << "Digite o ID: \n";
         cin >> numID;

@@ -43,9 +43,20 @@ class date{
         }
 
         std::string Exibir(){
+            string _dia = to_string(dia);
+            string _mes = to_string(mes);
+            string _ano = to_string(ano);
             std::string data;
 
-            std::cout << dia << "/" << mes << "/" << ano << "\n";
+            if(dia < 10){
+                _dia = "0" + _dia;
+            }
+
+            if(mes < 10){
+                _mes = "0" + _mes;
+            }
+
+            std::cout << _dia << "/" << _mes << "/" << _ano << "\n";
 
             return data;
         }

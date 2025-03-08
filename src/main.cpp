@@ -5,7 +5,6 @@ int MAXNOMEDEV = 15;
 #include "../objetos/manager.h"
 #include "../objetos/save_load.h"
 #include <iostream>
-#include <fstream>
 
 using namespace std;
 
@@ -14,15 +13,9 @@ int main(){
     //Carregar as informações salvas se tiver
     Manager manager;
     save_load sl;
-    ifstream LoadFile("estoque.crud");
 
-    if(!LoadFile){
-        cout << "Problema ao abrir arquivo de estoque\n";
-        return {};
-    }
-    else{
-        sl.carregarJogos(manager.jogos, LoadFile);
-        LoadFile.close();
+    if(sl.carregarGeral(manager) == -1){
+        return 0;
     }
 
     while(1){
@@ -67,19 +60,8 @@ int main(){
                 break;
             case 8:
                 //Salvar
-                ofstream saveFile("estoque.crud");
-                if(!saveFile){
-                    cout << "Problema ao abrir arquivo de estoque\n";
+                if(sl.salvarGeral(manager) == -1){
                     continue;
-                }
-                else{
-                    cout << "Salvando as informações...\n";
-
-                    sl.salvarJogos(manager.jogos, saveFile);
-                    saveFile.close();
-
-                    cout << "Dados salvos\n";
-                    return 0;
                 }
                 break;
         }
