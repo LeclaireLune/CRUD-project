@@ -13,8 +13,9 @@ class save_load{
         int salvarGeral(Manager &manager){
             ofstream jogosSaveFile("estoque.crud");
             ofstream vendasSaveFile("vendas.crud");
+            ofstream clienteSaveFile("clientes.crud");
 
-            if(!jogosSaveFile || !vendasSaveFile){
+            if(!jogosSaveFile || !vendasSaveFile || !clienteSaveFile){
                 cout << "Problema ao abrir arquivo para salvar dados\n";
                 manager.FC.EnterContinue();
                 return -1;
@@ -26,6 +27,8 @@ class save_load{
                 jogosSaveFile.close();
                 salvarVendas(manager.vendas, vendasSaveFile);
                 vendasSaveFile.close();
+                salvarClientes(manager.pessoas, clienteSaveFile);
+                clienteSaveFile.close();
 
                 cout << "Dados salvos\n";
                 return 1;
@@ -36,8 +39,9 @@ class save_load{
         int carregarGeral(Manager &manager){
             ifstream jogosLoadFile("estoque.crud");
             ifstream vendasLoadFile("vendas.crud");
+            ifstream clienteLoadFile("clientes.crud");
 
-            if(!jogosLoadFile){
+            if(!jogosLoadFile  || !vendasLoadFile || !clienteLoadFile){
                 cout << "Problema ao abrir arquivo de dados salvos\n";
                 manager.FC.EnterContinue();
                 return -1;
@@ -47,6 +51,8 @@ class save_load{
                 jogosLoadFile.close();
                 carregarVendas(manager.vendas, vendasLoadFile);
                 vendasLoadFile.close();
+                carregarClientes(manager.pessoas, clienteLoadFile);
+                clienteLoadFile.close();
                 return 1;
             }
         }
@@ -143,6 +149,37 @@ class save_load{
 
                 salvarJogos(vendas[i].itens, Arquivo);
             }
+        }
+
+        void salvarClientes (vector<usuario> &pessoas, ofstream &Arquivo){
+            for (int i = 0; i < pessoas.size(); i++){
+                Arquivo << pessoas[i].numID << "," << pessoas[i].nome << "," << pessoas[i].CPF_CNPJ << "," << pessoas[i].telefone<< "\n";
+
+            }
+        }
+
+        void carregarClientes (vector<usuario> &pessoas, ifstream &Arquivo){
+            string linha;
+            
+            while (getline (Arquivo, linha)){
+                stringstream ss(linha);
+                string numID, nome, CPF_CNPJ, telefone;
+                usuario tempUsuario;
+
+                getline (ss, numID, ',');
+                getline (ss, nome, ',');
+                getline (ss, CPF_CNPJ, ',');
+                getline (ss, telefone, ',');
+
+                tempUsuario.numID = stoi(numID);
+                tempUsuario.nome = nome;
+                tempUsuario.CPF_CNPJ = CPF_CNPJ;
+                tempUsuario.telefone = telefone;
+
+                pessoas.push_back(tempUsuario);
+
+            }
+
         }
 };
 
