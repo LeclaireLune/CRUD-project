@@ -1,7 +1,6 @@
 #ifndef VENDA_H
 #define VENDA_H
 
-#include "date.h"
 #include "jogo.h"
 #include "cliente.h"
 #include <vector>

@@ -9,7 +9,6 @@
 #include "jogo.h"
 #include "venda.h"
 #include "cliente.h"
-#include "genFunctions.h"
 
 using namespace std;
 

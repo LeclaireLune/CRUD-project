@@ -2,10 +2,10 @@
 #define CLIENTE_H
 
 #include "genFunctions.h"
+#include "date.h"
 #include <string>
 #include <iostream>
 #include <vector>
-#include "date.h"
 
 using namespace std;
 
