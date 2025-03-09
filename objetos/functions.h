@@ -54,7 +54,7 @@ class funcoes : public GeneralFunctions{
             }
         }
 
-        void alterar(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option, int cadastrados, int proximoID){
+        void alterar(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option){
             if(option == 1){
                 jogo temp;
                 temp.alterarJogo(jogos);
@@ -63,7 +63,7 @@ class funcoes : public GeneralFunctions{
 
             else if(option == 2){
                 usuario temp;
-                temp.adicionarUsuario(usuarios, cadastrados, proximoID);
+                temp.alterarUsuario(usuarios);
                 return;
             }
 
@@ -74,7 +74,7 @@ class funcoes : public GeneralFunctions{
             }
         }
 
-        void exibirTodos(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option, int id){
+        void exibirTodos(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option){
             if(option == 1){
                 jogo temp;
                 temp.exibirTodosJogos(jogos);
@@ -89,7 +89,7 @@ class funcoes : public GeneralFunctions{
 
             else if(option == 3){
                 venda temp;
-                temp.exibirTodasVendas(vendas);
+                temp.exibirTodasVendas(vendas, usuarios);
                 return;
             }
         }
@@ -114,7 +114,7 @@ class funcoes : public GeneralFunctions{
             }
         }
 
-        void exibirUm(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option, int id){
+        void exibirUm(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option){
             if(option == 1){
                 jogo temp;
                 temp.exibirUm(jogos);
@@ -123,7 +123,7 @@ class funcoes : public GeneralFunctions{
 
             else if(option == 2){
                 usuario temp;
-                temp.exibirUmUsuario(usuarios, id);
+                temp.exibirUmUsuario(usuarios);
                 return;
             }
 

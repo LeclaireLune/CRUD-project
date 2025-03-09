@@ -7,6 +7,12 @@
 #include <vector>
 #include <string>
 #include <ctime>
+#include <iomanip>
+
+#define W_ID 10
+#define W_ID_COMP 15
+#define W_VENDA_VALOR 15
+#define W_DATA 15
 
 using namespace std;
 
@@ -30,22 +36,8 @@ class venda{
             itens = _itens;
         }
 
-        float calValorTotal (vector<jogo> &jogosComprados){
-            float valorTotal = 0.0;
-
-            for (jogo n : jogosComprados){
-                valorTotal += n.valor;
-            }
-            
-            return valorTotal;
-        }
-
-        void relatorioSimples(){
-            cout << ID << "\t" << IDComprador << "\t" << valorTotal << "\t" << dataCompra.Exibir() << "\n";
-        }
-
-        void relatorioCompleto(vector<usuario> &clientes){
-            int quantidade = 0, id_cliente = -1;
+        string identificarCliente(vector<usuario> &clientes){
+            int id_cliente = -1;
             string cliente_identification;
 
             //Procura o cliente para identificar, caso não encontre deixa como não identificado
@@ -60,12 +52,64 @@ class venda{
                 cliente_identification = "Cliente não identificado";
             }
 
-            cout << ID << "\t" << cliente_identification << "\t" << valorTotal << "\t" << dataCompra.Exibir() << "Itens: " << itens.size() << "\n";
+            return cliente_identification;
+        }
+
+        int iterarVendaId(int IdEscolhido, vector<venda> &vendas){
+            int idEncontrado = -1, i = 0;;
+            for (venda n : vendas){
+                if(n.ID == IdEscolhido){
+                    idEncontrado = i;
+                    return idEncontrado;
+                }
+                i++;
+            }
+            return idEncontrado;
+        }
+
+        void cabecalhoRelatorio(int w_clientid){
+            cout << left << setw(W_ID) << "ID" << setw(w_clientid) << "Cliente_Id" << setw(W_VALOR) << "Valor" << setw(W_DATA) << "Data Compra" << endl;
+        }
+
+        void relatorioSimples(vector<usuario> &clientes, bool mostrarCabecalho){
+            string cliente_ID = identificarCliente(clientes);
+
+            if(mostrarCabecalho){
+                cabecalhoRelatorio(cliente_ID.size() + 2);
+            }
+
+            cout << left << setw(W_ID) << ID << setw(cliente_ID.size() + 2) << cliente_ID << setw(W_VALOR) << valorTotal << setw(W_DATA) << dataCompra.to_String() << "Itens: " << itens.size() << "\n";
+        }
+
+        void relatorioCompleto(vector<usuario> &clientes){
+            int quantidade = 0, id_cliente = -1;
+            string cliente_identification;
+            jogo tempJogo;
+
+            cliente_identification = identificarCliente(clientes);
+
+            //Controle do tamanho da tabela
+            int W_clienteID = max(W_ID_COMP, (int)cliente_identification.size() + 2);
+
+            cabecalhoRelatorio(W_clienteID);
+            cout << left << setw(W_ID) << ID << setw(W_clienteID) << cliente_identification << setw(W_VALOR) << valorTotal << setw(W_DATA) << dataCompra.to_String() << " Itens: " << itens.size() << "\n";
     
+            cout << left << "    " << setw(MAXNOMEJOGO) << "Nome" << "Valor" << endl;
             for(jogo n : itens){
-                cout << quantidade + 1 << " | ";
-                cout << n.nome << "\t" << n.valor << "\n";
+                cout << quantidade << " | ";
+                cout << left << setw(MAXNOMEJOGO) << n.nome << n.valor << "\n";
+                quantidade++;
             } 
+        }
+
+        float calValorTotal (vector<jogo> &jogosComprados){
+            float valorTotal = 0.0;
+
+            for (jogo n : jogosComprados){
+                valorTotal += n.valor;
+            }
+            
+            return valorTotal;
         }
 
         void alterarListaJogos(vector<jogo> &jogosAlterar, vector<jogo> &jogos){
@@ -182,7 +226,7 @@ class venda{
             id_comprador = tempUsuario2.procurarCliente(clientes, nomeComprador);
             if(id_comprador == -1){
                 //tempUsuario.adicionarUsuario();
-                tempUsuario = new usuario(nomeComprador, "000.000.000-00", 0);
+                tempUsuario = new usuario(nomeComprador, "000.000.000-00", "(83) 99999-9999", 0);
                 clientes.push_back(*tempUsuario);
                 id_comprador = 0;
             }
@@ -206,7 +250,6 @@ class venda{
             
             venda tempVenda(id_venda, id_comprador, valorTotal, tempData, jogosComprados);
 
-            cout << "Id\tCliente\tValor total\tData da venda\n";
             tempVenda.relatorioCompleto(clientes);
 
             cout << "As informações estão corretas? (s/n): ";
@@ -290,8 +333,7 @@ class venda{
 
             if(vendas.size() != 0){
                 cout << "Qual o id da venda a ser alterada? ";
-                cin >> id;
-                cin.ignore();
+                GF.ChecarTipoErrado(id, 0, vendas.size() - 1);
 
                 for(venda n : vendas){
                     if(n.ID == id){
@@ -301,12 +343,10 @@ class venda{
                 
                 while(idEncontrado == -1){
                     cout << "Não foi encontrado, tentar novamente(s/n)? ";
-                    cin >> tentarDenovo;
+                    GF.ChecarTipoErrado(tentarDenovo);
                     if(tentarDenovo == 's'){
                         cout << "Qual o id da venda a ser alterada? ";
-                        GF.LimparBuffer();
-                        cin >> id;
-                        cin.ignore();
+                        GF.ChecarTipoErrado(id, 0, vendas.size() - 1);
         
                         for(venda n : vendas){
                             if(n.ID == id){
@@ -329,13 +369,18 @@ class venda{
                 
         }
 
-        void exibirTodasVendas(vector<venda> &vendas){
+        void exibirTodasVendas(vector<venda> &vendas, vector<usuario> &clientes){
+            bool mostrarCabecalho = true;
             if(vendas.size() == 0){
                 cout << "Não há vendas cadastrados\n";
             }
             else{
                 for (venda n : vendas){
-                    n.relatorioSimples();
+                    n.relatorioSimples(clientes, mostrarCabecalho);
+                    //Se for true (primeira vez) mostrar, desativa após
+                    if(mostrarCabecalho){
+                        mostrarCabecalho = false;
+                    }
                 }
             }
 
@@ -348,8 +393,7 @@ class venda{
 
             if(vendas.size() != 0){
                 cout << "Qual o id da venda a ser exibida? ";
-                cin >> id;
-                cin.ignore();
+                GF.ChecarTipoErrado(id, 0, vendas.size() - 1);
 
                 for(venda n : vendas){
                     if(n.ID == id){
@@ -359,13 +403,10 @@ class venda{
                 
                 while(idEncontrado == -1){
                     cout << "Não foi encontrado, tentar novamente(s/n)? ";
-                    cin >> tentarDenovo;
+                    GF.ChecarTipoErrado(tentarDenovo);
                     if(tentarDenovo == 's'){
                         cout << "Qual o id da venda a ser exibida? ";
-                        GF.LimparBuffer();
-                        cin >> id;
-                        cin.ignore();
-        
+                        GF.ChecarTipoErrado(id, 0, vendas.size() - 1);
                         for(venda n : vendas){
                             if(n.ID == id){
                                 idEncontrado = id;
@@ -414,18 +455,17 @@ class venda{
                 string Nome;
                 int rsp, id_escolhido, quantidade = 0;
                 char tentarDenovo, removerMais, correto;
+                bool mostrarCabecalho = true;
 
                 if(vendas.size() != 0){
-                    cout << "id\tid_comprador\tValor Total\tData compra";
                     for(venda n : vendas){
-                        cout << quantidade << "\t";
-                        n.relatorioSimples();
-                        quantidade++;
+                        n.relatorioSimples(clientes, mostrarCabecalho);
+                        if(mostrarCabecalho) { mostrarCabecalho = false; }
                     }
 
-                    cout << "Qual o id da venda a ser removida? ";
+                    cout << "Qual o Id da venda a ser removida? ";
                     GF.ChecarTipoErrado(id_escolhido, 0, vendas.size() - 1);
-    
+                    id_escolhido = iterarVendaId(id_escolhido, vendas);
                     vendas[id_escolhido].relatorioCompleto(clientes);
                 }
                 else{
@@ -451,7 +491,7 @@ class venda{
                 }
 
                 cout << "Deseja deletar outra? (s/n) ";
-                cin >> removerMais;
+                GF.ChecarTipoErrado(removerMais);
                 if(removerMais == 's'){
                     system("clear");
                     continue;

@@ -53,13 +53,41 @@ class jogo{
         }
 
         int iterarIdJogo(vector<jogo> &jogos, string Nome){
-            int idEncontrado = -1, i = 0;
+            int idEncontrado = -1, i = 0, encontrados = 0, idEscolhido;
+            vector<int> Ids;
+
+            int maiorNome = MAXNOMEJOGO;
+            int maiorDev = MAXNOMEDEV;
+
             for (jogo n : jogos){
                 if(n.nome == Nome){
-                    idEncontrado = i;
-                    return idEncontrado;
+                    Ids.push_back(i);
+                    encontrados += 1;
+                    maiorNome = max(maiorNome, (int)n.nome.size() + 2);
+                    maiorDev = max(maiorDev, (int)n.desenvolvedor.size() + 2);
                 }
                 i++;
+            }
+
+            if(encontrados > 1){
+                int z = 0;
+                cout << "Foi encontrado mais de um item com esse nome, selecione o desejado pelo seu numero\n" << endl;
+                cout << "    ";
+                cabecalhoRelatorio(maiorNome, maiorDev);
+
+                for(int j : Ids){
+                    cout << z << " | ";
+                    jogos[j].relatorio(maiorNome, maiorDev);
+                    z++;
+                }
+
+                GF.ChecarTipoErrado(idEscolhido, 0, z);
+                idEncontrado = Ids[idEscolhido];
+                return idEncontrado;
+            }
+            else if (encontrados == 1){
+                idEncontrado = Ids[0];
+                return idEncontrado;
             }
             return idEncontrado;
         }
@@ -70,17 +98,16 @@ class jogo{
             string Nome;
             char tentarDenovo;
 
-            cout << "Qual o nome do jogo? ";
+            cout << "Qual o nome do jogo?" << endl;
             GF.LimparBuffer();
             getline(cin, Nome);
-
             idEncontrado = iterarIdJogo(jogos, Nome);
-            
+
             while(idEncontrado == -1){
                 cout << "Não foi encontrado, tentar novamente(s/n)? ";
                 cin >> tentarDenovo;
                 if(tentarDenovo == 's'){
-                    cout << "Qual o nome do jogo a ser exibido? ";
+                    cout << "Qual o nome do jogo? ";
                     GF.LimparBuffer();
                     getline(cin, Nome);
                     idEncontrado = iterarIdJogo(jogos, Nome);
@@ -89,6 +116,8 @@ class jogo{
                     return -1;
                 }
             }
+
+            system("clear");
 
             return idEncontrado;
         }
@@ -106,8 +135,8 @@ class jogo{
                     return;
                 }
 
-                int maiorNome = (int)jogos[idEncontrado].nome.size() + 2;
-                int maiorDev = (int)jogos[idEncontrado].desenvolvedor.size() + 2;
+                int maiorNome = max(MAXNOMEJOGO, (int)jogos[idEncontrado].nome.size() + 2);
+                int maiorDev = max(MAXNOMEDEV, (int)jogos[idEncontrado].desenvolvedor.size() + 2);
 
                 cabecalhoRelatorio(maiorNome, maiorDev);
                 jogos[idEncontrado].relatorio(maiorNome, maiorDev);  
@@ -134,54 +163,6 @@ class jogo{
             GF.EnterContinue();
         }
 
-        //Remove um jogo do vetor
-        void removerJogo(vector<jogo> &jogos, int cadastrados){
-            while(1){
-                string Nome;
-                int rsp, idEncontrado;
-                char tentarDenovo, removerMais, correto;
-    
-                //Logica para procurar o id do jogo a ser removido
-                if(jogos.size() != 0){
-                    idEncontrado = ProcurarIdJogo(jogos);
-
-                    if(idEncontrado == -1){
-                        return;
-                    }
-
-                    int maiorNome = (int)jogos[idEncontrado].nome.size() + 2;
-                    int maiorDev = (int)jogos[idEncontrado].desenvolvedor.size() + 2;
-
-                    cabecalhoRelatorio(maiorNome, maiorDev);
-                    jogos[idEncontrado].relatorio(maiorNome, maiorDev);
-                }
-                else{
-                    cout << "Não há jogos cadastrados\n";
-                    GF.EnterContinue();
-                    return;
-                }
-
-                //Verificação se está correto a escolha
-                cout << "É o jogo correto? (s/n) ";
-                GF.ChecarTipoErrado(correto);
-
-                if(correto == 's'){
-                    jogos.erase(jogos.begin() + idEncontrado);
-                    cout << "Jogo deletado com sucesso!\n";
-                    cadastrados -= 1;
-                }
-
-                cout << "Deseja deletar outro? (s/n) ";
-                cin >> removerMais;
-                if(removerMais == 's'){
-                    system("clear");
-                    continue;
-                }
-                else{
-                    break;
-                }
-            }
-        }
 
         //Adiciona um jogo no vetor
         jogo AdicionarJogo(vector<jogo> &jogos, int &cadastrados, int &proximoId){
@@ -228,6 +209,55 @@ class jogo{
             return newgame;
         }
 
+        //Remove um jogo do vetor
+        void removerJogo(vector<jogo> &jogos, int cadastrados){
+            while(1){
+                string Nome;
+                int rsp, idEncontrado;
+                char tentarDenovo, removerMais, correto;
+    
+                //Logica para procurar o id do jogo a ser removido
+                if(jogos.size() != 0){
+                    idEncontrado = ProcurarIdJogo(jogos);
+
+                    if(idEncontrado == -1){
+                        return;
+                    }
+
+                int maiorNome = max(MAXNOMEJOGO, (int)jogos[idEncontrado].nome.size() + 2);
+                int maiorDev = max(MAXNOMEDEV, (int)jogos[idEncontrado].desenvolvedor.size() + 2);
+
+                    cabecalhoRelatorio(maiorNome, maiorDev);
+                    jogos[idEncontrado].relatorio(maiorNome, maiorDev);
+                }
+                else{
+                    cout << "Não há jogos cadastrados\n";
+                    GF.EnterContinue();
+                    return;
+                }
+
+                //Verificação se está correto a escolha
+                cout << "É o jogo correto? (s/n) ";
+                GF.ChecarTipoErrado(correto);
+
+                if(correto == 's'){
+                    jogos.erase(jogos.begin() + idEncontrado);
+                    cout << "Jogo deletado com sucesso!\n";
+                    cadastrados -= 1;
+                }
+
+                cout << "Deseja deletar outro? (s/n) ";
+                cin >> removerMais;
+                if(removerMais == 's'){
+                    system("clear");
+                    continue;
+                }
+                else{
+                    break;
+                }
+            }
+        }
+
         //Alterar um jogo presente no vetor
         void alterarJogo(vector<jogo> &jogos){
             while(1){
@@ -243,8 +273,8 @@ class jogo{
                         return;
                     }
 
-                    int maiorNome = (int)jogos[idEncontrado].nome.size() + 2;
-                    int maiorDev = (int)jogos[idEncontrado].nome.size() + 2;
+                    int maiorNome = max(MAXNOMEJOGO, (int)jogos[idEncontrado].nome.size() + 2);
+                    int maiorDev = max(MAXNOMEDEV, (int)jogos[idEncontrado].desenvolvedor.size() + 2);
                     
                     cabecalhoRelatorio(maiorNome, maiorDev);
                     jogos[idEncontrado].relatorio(maiorNome, maiorDev);  

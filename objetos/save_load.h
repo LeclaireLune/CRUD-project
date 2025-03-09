@@ -11,17 +11,21 @@ class save_load{
     public:
         //Chamar todas as funções de salvar
         int salvarGeral(Manager &manager){
-            ofstream saveFile("estoque.crud");
-            if(!saveFile){
-                cout << "Problema ao abrir arquivo de estoque\n";
+            ofstream jogosSaveFile("estoque.crud");
+            ofstream vendasSaveFile("vendas.crud");
+
+            if(!jogosSaveFile || !vendasSaveFile){
+                cout << "Problema ao abrir arquivo para salvar dados\n";
                 manager.FC.EnterContinue();
                 return -1;
             }
             else{
                 cout << "Salvando as informações...\n";
 
-                salvarJogos(manager.jogos, saveFile);
-                saveFile.close();
+                salvarJogos(manager.jogos, jogosSaveFile);
+                jogosSaveFile.close();
+                salvarVendas(manager.vendas, vendasSaveFile);
+                vendasSaveFile.close();
 
                 cout << "Dados salvos\n";
                 return 1;
@@ -30,16 +34,19 @@ class save_load{
 
         //Chamar todas as funções de carregar
         int carregarGeral(Manager &manager){
-            ifstream LoadFile("estoque.crud");
+            ifstream jogosLoadFile("estoque.crud");
+            ifstream vendasLoadFile("vendas.crud");
 
-            if(!LoadFile){
-                cout << "Problema ao abrir arquivo de estoque\n";
+            if(!jogosLoadFile){
+                cout << "Problema ao abrir arquivo de dados salvos\n";
                 manager.FC.EnterContinue();
                 return -1;
             }
             else{
-                carregarJogos(manager.jogos, LoadFile);
-                LoadFile.close();
+                carregarJogos(manager.jogos, jogosLoadFile);
+                jogosLoadFile.close();
+                carregarVendas(manager.vendas, vendasLoadFile);
+                vendasLoadFile.close();
                 return 1;
             }
         }
@@ -52,8 +59,12 @@ class save_load{
         //Carrega informações sobre os jogos
         void carregarJogos(vector<jogo> &jogos, ifstream &Arquivo){
             string linha;
-        
-            while(getline(Arquivo, linha)){
+            int quant;
+            Arquivo >> quant;
+            getline(Arquivo, linha);
+
+            for(int i = 0; i < quant; i++){
+                getline(Arquivo, linha);
                 stringstream l(linha);
                 string data;
                 jogo tempJogo;
@@ -89,9 +100,48 @@ class save_load{
 
         //Salva informações sobre os jogos
         void salvarJogos(vector<jogo> &jogos, ofstream &Arquivo){
-            //Loop para escrever as informaçções de cada jogo no arquivo
+            //Loop para escrever as informações de cada jogo no arquivo
+            Arquivo << jogos.size() << endl;
             for(int i = 0; i < jogos.size(); i++){
                 Arquivo << jogos[i].nome << "," << jogos[i].disponiveis << "," << jogos[i].valor << "," << jogos[i].numID << "," << jogos[i].desenvolvedor << "," << jogos[i].dataLançamento.dia << "," << jogos[i].dataLançamento.mes << "," << jogos[i].dataLançamento.ano << "\n";
+            }
+        }
+
+        void carregarVendas(vector<venda> &vendas, ifstream &Arquivo){
+            string linha;
+
+            while(getline(Arquivo, linha)){
+                stringstream l (linha);
+                string data;
+                string ID, IdComprador, dia, mes, ano, valorTotal;
+                vector<jogo> itens;
+                venda tempVenda;
+
+                getline(l, ID, ',');
+                getline(l, IdComprador, ',');
+                getline(l, valorTotal, ',');
+                getline(l, dia, ',');
+                getline(l, mes, ',');
+                getline(l, ano, ',');
+                carregarJogos(itens, Arquivo);
+
+                tempVenda.ID = stoi(ID);
+                tempVenda.IDComprador = stoi(IdComprador);
+                tempVenda.valorTotal = stof(valorTotal);
+                tempVenda.dataCompra.dia = stoi(dia);
+                tempVenda.dataCompra.mes = stoi(mes);
+                tempVenda.dataCompra.ano = stoi(ano);
+                tempVenda.itens = itens;
+
+                vendas.push_back(tempVenda);
+            }
+        }
+
+        void salvarVendas(vector<venda> &vendas, ofstream &Arquivo){
+            for(int i = 0; i < vendas.size(); i++){
+                Arquivo << vendas[i].ID << "," << vendas[i].IDComprador << "," << vendas[i].valorTotal << "," << vendas[i].dataCompra.dia << "," << vendas[i].dataCompra.mes << "," << vendas[i].dataCompra.ano << endl;
+
+                salvarJogos(vendas[i].itens, Arquivo);
             }
         }
 };

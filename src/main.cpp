@@ -1,6 +1,7 @@
 //Variáveis globais para formatação das tabelas
 int MAXNOMEJOGO = 15;
 int MAXNOMEDEV = 15;
+int MAXCLIENTEID = 30;
 
 #include "../objetos/manager.h"
 #include "../objetos/save_load.h"
@@ -63,7 +64,7 @@ int main(){
                 if(sl.salvarGeral(manager) == -1){
                     continue;
                 }
-                break;
+                return 0;
         }
     }
 
