@@ -13,9 +13,16 @@ class Manager{
         vector<jogo> jogos;
         vector<venda> vendas;
         vector<usuario> pessoas;
+
         int jogosCadastrados = 0;
         int vendasCadastradas = 0;
         int pessoasCadastradas = 0;
+
+        int proximoIdVenda = 0;
+        int proximoIdJogos = 0;
+        int proximoIdPessoas = 0;
+
+        int tamMaxNome = 15;
         funcoes FC;
 
     void EstoqueMenu(Manager &manager){
@@ -34,7 +41,7 @@ class Manager{
 
             switch(rsp){
                 case 1:
-                    FC.adicionar(manager.jogos, manager.pessoas, manager.vendas, manager.vendasCadastradas, 1);
+                    FC.adicionar(manager.jogos, manager.pessoas, manager.vendas, manager.jogosCadastrados, 1, manager.proximoIdJogos);
                     break;
                 
                 case 2:

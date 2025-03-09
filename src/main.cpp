@@ -1,12 +1,23 @@
-#include <iostream>
+//Variáveis globais para formatação das tabelas
+int MAXNOMEJOGO = 15;
+int MAXNOMEDEV = 15;
+int MAXCLIENTEID = 30;
 
 #include "../objetos/manager.h"
+#include "../objetos/save_load.h"
+#include <iostream>
 
 using namespace std;
+
 
 int main(){
     //Carregar as informações salvas se tiver
     Manager manager;
+    save_load sl;
+
+    if(sl.carregarGeral(manager) == -1){
+        return 0;
+    }
 
     while(1){
         int rsp;
@@ -15,15 +26,12 @@ int main(){
         cout << "Sistema de Controle\n";
         cout << "Escolha uma das opções\n";
         cout << "1.Realizar venda\n2.Controle Estoque\n3.Listar todas\n4.Exibir uma\n5.Alterar\n6.Remover\n7.Exibir Relatório\n8.Sair\n";
-        while(!(cin >> rsp) || rsp < 1 || rsp > 8){
-            cout << "Opção inválida, tente novamente\n";
-            manager.FC.LimparBuffer();
-        }
+        GF.ChecarTipoErrado(rsp, 1, 8);
 
         switch(rsp){
             case 1:
                 //Realizar venda
-                manager.FC.adicionar(manager.jogos, manager.pessoas, manager.vendas, manager.vendasCadastradas, 3);
+                manager.FC.adicionar(manager.jogos, manager.pessoas, manager.vendas, manager.vendasCadastradas, 3, manager.proximoIdVenda);
                 break;
             case 2:
                 //Controle Estoque
@@ -31,8 +39,8 @@ int main(){
                 break;
 
             case 3:
-                manager.FC.exibirTodos(manager.jogos, manager.pessoas, manager.vendas, 3);
                 //Listar todas
+                manager.FC.exibirTodos(manager.jogos, manager.pessoas, manager.vendas, 3);
                 break;
 
             case 4:
@@ -52,12 +60,13 @@ int main(){
                 manager.FC.relatorio(manager.jogos, manager.pessoas, manager.vendas, 3);
                 break;
             case 8:
-                //Break
-                break;
+                //Salvar
+                if(sl.salvarGeral(manager) == -1){
+                    continue;
+                }
+                return 0;
         }
     }
-
-    //Salvar as informações
 
     return 0;
 }
