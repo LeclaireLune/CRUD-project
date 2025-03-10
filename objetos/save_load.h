@@ -151,33 +151,41 @@ class save_load{
             }
         }
 
-        void salvarClientes (vector<usuario> &pessoas, ofstream &Arquivo){
+        void salvarClientes (vector<usuario*> &pessoas, ofstream &Arquivo){
             for (int i = 0; i < pessoas.size(); i++){
-                Arquivo << pessoas[i].numID << "," << pessoas[i].nome << "," << pessoas[i].CPF_CNPJ << "," << pessoas[i].telefone<< "\n";
+                Arquivo << pessoas[i]->VIP << "," << pessoas[i]->numID << "," << pessoas[i]->nome << "," << pessoas[i]->CPF << "," << pessoas[i]->telefone<< "\n";
 
             }
         }
 
-        void carregarClientes (vector<usuario> &pessoas, ifstream &Arquivo){
+        void carregarClientes (vector<usuario*> &pessoas, ifstream &Arquivo){
             string linha;
             
             while (getline (Arquivo, linha)){
                 stringstream ss(linha);
-                string numID, nome, CPF_CNPJ, telefone;
-                usuario tempUsuario;
+                string VIP, numID, nome, CPF, telefone;
+                usuario *tempUsuario;
 
+                getline (ss, VIP, ',');
                 getline (ss, numID, ',');
                 getline (ss, nome, ',');
-                getline (ss, CPF_CNPJ, ',');
+                getline (ss, CPF, ',');
                 getline (ss, telefone, ',');
 
-                tempUsuario.numID = stoi(numID);
-                tempUsuario.nome = nome;
-                tempUsuario.CPF_CNPJ = CPF_CNPJ;
-                tempUsuario.telefone = telefone;
+                if(stoi(VIP) == 1){
+                    tempUsuario = new clienteVIP;
+                }
+                else{
+                    tempUsuario = new clienteComum;
+                }
+
+                tempUsuario->VIP = stoi(VIP);
+                tempUsuario->numID = stoi(numID);
+                tempUsuario->nome = nome;
+                tempUsuario->CPF = CPF;
+                tempUsuario->telefone = telefone;
 
                 pessoas.push_back(tempUsuario);
-
             }
 
         }

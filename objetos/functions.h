@@ -8,26 +8,24 @@
 
 #include "jogo.h"
 #include "venda.h"
-#include "cliente.h"
+#include "controleCliente.h"
 
 using namespace std;
 
 class funcoes : public GeneralFunctions{ 
     public:
 
-        void adicionar(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int &Cadastrados, int option, int &proximoId){
+        void adicionar(vector<jogo> &jogos, vector<usuario*> &usuarios, vector<venda> &vendas, int &Cadastrados, int option, int &proximoId, int &cadClientes, int &idCliente){
             if(option == 1){
                 jogo newgame = newgame.AdicionarJogo(jogos, Cadastrados, proximoId);
                 jogos.push_back(newgame);
             }
             else if(option == 2){
-                usuario newuser;
-                newuser.adicionarUsuario(usuarios, Cadastrados, proximoId);
-                usuarios.push_back(newuser);
+                CC.adicionarPolimorfico(usuarios, Cadastrados, proximoId);
             }
             else if(option == 3){
                 venda newsale;
-                newsale = newsale.adicionarVenda(jogos, usuarios, vendas, proximoId);
+                newsale = newsale.adicionarVenda(jogos, usuarios, vendas, proximoId, cadClientes, idCliente);
                 if(newsale.ID == -1){
                     //Venda não pôde ser concluída
                 }
@@ -38,14 +36,13 @@ class funcoes : public GeneralFunctions{
             
         }
 
-        void remover(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int cadastrados, int option){
+        void remover(vector<jogo> &jogos, vector<usuario*> &usuarios, vector<venda> &vendas, int cadastrados, int option){
             if(option == 1){
                 jogo newgame;
                 newgame.removerJogo(jogos, cadastrados);
             }
             else if(option == 2){
-                usuario newuser;
-                newuser.removerUsuario(usuarios);
+                CC.removerUsuario(usuarios);
             }
             else if(option == 3){
                 venda tempVenda;
@@ -53,7 +50,7 @@ class funcoes : public GeneralFunctions{
             }
         }
 
-        void alterar(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option){
+        void alterar(vector<jogo> &jogos, vector<usuario*> &usuarios, vector<venda> &vendas, int option){
             if(option == 1){
                 jogo temp;
                 temp.alterarJogo(jogos);
@@ -61,8 +58,7 @@ class funcoes : public GeneralFunctions{
             }
 
             else if(option == 2){
-                usuario temp;
-                temp.alterarUsuario(usuarios);
+                CC.alterarUsuario(usuarios);
                 return;
             }
 
@@ -73,7 +69,7 @@ class funcoes : public GeneralFunctions{
             }
         }
 
-        void exibirTodos(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option){
+        void exibirTodos(vector<jogo> &jogos, vector<usuario*> &usuarios, vector<venda> &vendas, int option){
             if(option == 1){
                 jogo temp;
                 temp.exibirTodosJogos(jogos);
@@ -81,8 +77,7 @@ class funcoes : public GeneralFunctions{
             }
 
             else if(option == 2){
-                usuario temp;
-                temp.exibirTodosUsuario(usuarios);
+                CC.exibirTodosUsuario(usuarios);
                 return;
             }
 
@@ -93,7 +88,7 @@ class funcoes : public GeneralFunctions{
             }
         }
 
-        void relatorio(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option){
+        void relatorio(vector<jogo> &jogos, vector<usuario*> &usuarios, vector<venda> &vendas, int option){
             if(option == 1){
                 jogo temp;
                 temp.relatorioJogo(jogos);
@@ -101,8 +96,7 @@ class funcoes : public GeneralFunctions{
             }
 
             else if(option == 2){
-                usuario temp;
-                temp.relatorioUsuario(usuarios);
+                CC.relatorioUsuario(usuarios);
                 return;
             }
 
@@ -113,7 +107,7 @@ class funcoes : public GeneralFunctions{
             }
         }
 
-        void exibirUm(vector<jogo> &jogos, vector<usuario> &usuarios, vector<venda> &vendas, int option){
+        void exibirUm(vector<jogo> &jogos, vector<usuario*> &usuarios, vector<venda> &vendas, int option){
             if(option == 1){
                 jogo temp;
                 temp.exibirUm(jogos);
@@ -121,8 +115,7 @@ class funcoes : public GeneralFunctions{
             }
 
             else if(option == 2){
-                usuario temp;
-                temp.exibirUmUsuario(usuarios);
+                CC.exibirUmUsuario(usuarios);
                 return;
             }
 

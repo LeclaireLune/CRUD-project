@@ -12,7 +12,7 @@ class Manager{
     public:
         vector<jogo> jogos;
         vector<venda> vendas;
-        vector<usuario> pessoas;
+        vector<usuario*> pessoas;
 
         int jogosCadastrados = 0;
         int vendasCadastradas = 0;
@@ -41,35 +41,83 @@ class Manager{
 
             switch(rsp){
                 case 1:
-                    FC.adicionar(manager.jogos, manager.pessoas, manager.vendas, manager.jogosCadastrados, 1, manager.proximoIdJogos);
+                    FC.adicionar(jogos, pessoas, vendas, jogosCadastrados, 1, proximoIdJogos, pessoasCadastradas, proximoIdPessoas);
                     break;
                 
                 case 2:
-                    FC.exibirTodos(manager.jogos, manager.pessoas, manager.vendas, 1);
+                    FC.exibirTodos(jogos, pessoas, vendas, 1);
                     break;
 
                 
                 case 3:
-                    FC.exibirUm(manager.jogos, manager.pessoas, manager.vendas, 1);
+                    FC.exibirUm(jogos, pessoas, vendas, 1);
                     break;
 
                 
                 case 4:
-                    FC.alterar(manager.jogos, manager.pessoas, manager.vendas, 1);
+                    FC.alterar(jogos, pessoas, vendas, 1);
                     break;
 
                 case 5:
-                    FC.remover(manager.jogos, manager.pessoas, manager.vendas, jogosCadastrados, 1);
+                    FC.remover(jogos, pessoas, vendas, jogosCadastrados, 1);
                     break;
 
                 
                 case 6:
-                    FC.relatorio(manager.jogos, manager.pessoas, manager.vendas, 1);
+                    FC.relatorio(jogos, pessoas, vendas, 1);
                     break;
 
                 
                 case 7:
-                    //Salvar;
+                    return;
+            }
+        }
+    }
+
+    void clienteMenu(Manager &manager){
+        while(1){
+
+            int rsp;
+            system("clear");
+            cout << "Sistema de Controle de Clientes\n";
+            cout << "Escolha uma das opções\n";
+            cout << "1.Inserir\n2.Listar todos\n3.Exibir um\n4.Alterar\n5.Remover\n6.Exibir Relatório\n7.Sair\n";
+
+            while(!(cin >> rsp) || rsp < 1 || rsp > 7){
+                cout << "Opção inválida, tente novamente\n";
+                FC.LimparBuffer();
+            }
+
+            switch(rsp){
+                case 1:
+                    FC.adicionar(jogos, pessoas, vendas, pessoasCadastradas, 2, proximoIdPessoas, pessoasCadastradas, proximoIdPessoas);
+                    break;
+                
+                case 2:
+                    FC.exibirTodos(jogos, pessoas, vendas, 2);
+                    break;
+
+                
+                case 3:
+                    FC.exibirUm(jogos, pessoas, vendas, 2);
+                    break;
+
+                
+                case 4:
+                    FC.alterar(jogos, pessoas, vendas, 2);
+                    break;
+
+                case 5:
+                    FC.remover(jogos, pessoas, vendas, pessoasCadastradas, 2);
+                    break;
+
+                
+                case 6:
+                    FC.relatorio(jogos, pessoas, vendas, 2);
+                    break;
+
+                
+                case 7:
                     return;
             }
         }

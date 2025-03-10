@@ -2,7 +2,7 @@
 #define VENDA_H
 
 #include "jogo.h"
-#include "cliente.h"
+#include "controleCliente.h"
 #include <vector>
 #include <string>
 #include <ctime>
@@ -14,6 +14,8 @@
 #define W_DATA 15
 
 using namespace std;
+
+controleCliente CC;
 
 class venda{
     public:
@@ -35,14 +37,14 @@ class venda{
             itens = _itens;
         }
 
-        string identificarCliente(vector<usuario> &clientes){
+        string identificarCliente(vector<usuario*> &clientes){
             int id_cliente = -1;
             string cliente_identification;
 
             //Procura o cliente para identificar, caso não encontre deixa como não identificado
             for(int i = 0; i < clientes.size(); i++){
-                if(IDComprador == clientes[i].numID){
-                    cliente_identification = clientes[i].nome + "(" + clientes[i].CPF_CNPJ + ")";
+                if(IDComprador == clientes[i]->numID){
+                    cliente_identification = clientes[i]->nome + "(" + clientes[i]->CPF + ")";
                     id_cliente = i;
                 }
             }
@@ -70,7 +72,7 @@ class venda{
             cout << left << setw(W_ID) << "ID" << setw(w_clientid) << "Cliente_Id" << setw(W_VALOR) << "Valor" << setw(W_DATA) << "Data Compra" << endl;
         }
 
-        void relatorioSimples(vector<usuario> &clientes, bool mostrarCabecalho){
+        void relatorioSimples(vector<usuario*> &clientes, bool mostrarCabecalho){
             string cliente_ID = identificarCliente(clientes);
 
             if(mostrarCabecalho){
@@ -80,7 +82,7 @@ class venda{
             cout << left << setw(W_ID) << ID << setw(cliente_ID.size() + 2) << cliente_ID << setw(W_VALOR) << valorTotal << setw(W_DATA) << dataCompra.to_String() << "Itens: " << itens.size() << "\n";
         }
 
-        void relatorioCompleto(vector<usuario> &clientes){
+        void relatorioCompleto(vector<usuario*> &clientes){
             int quantidade = 0, id_cliente = -1;
             string cliente_identification;
             jogo tempJogo;
@@ -197,13 +199,13 @@ class venda{
             alterarListaJogos(jogosComprados, jogos);
         }
 
-        venda adicionarVenda(vector<jogo> &jogos, vector<usuario> &clientes, vector<venda> &vendas, int &proximoId){
+        venda adicionarVenda(vector<jogo> &jogos, vector<usuario*> &clientes, vector<venda> &vendas, int &proximoId, int &cadClientes, int &pIdCliente){
             char tempRsp;
-            string nomeComprador, tempJogoComprado;
+            string nomeComprador, tempJogoComprado, CPF;
             vector<jogo> jogosComprados;
             jogo tempJogo;
             usuario *tempUsuario;
-            int id_jogo, id_venda, id_comprador;
+            int id_jogo, id_venda, indice_comprador, id_comprador;
 
             id_venda = proximoId;
 
@@ -216,19 +218,21 @@ class venda{
                 return vendaCancelada;
             }
 
-            cout << "Digite o nome do comprador: \n";
             GF.LimparBuffer();
-            getline(cin, nomeComprador);
-
             //Logica de procurar o comprador
-            usuario tempUsuario2;
-            id_comprador = tempUsuario2.procurarCliente(clientes, nomeComprador);
-            if(id_comprador == -1){
-                //tempUsuario.adicionarUsuario();
-                tempUsuario = new usuario(nomeComprador, "000.000.000-00", "(83) 99999-9999", 0);
-                clientes.push_back(*tempUsuario);
-                id_comprador = 0;
-            }
+            do{
+                cout << "Digite o cpf do comprador: \n";
+                getline(cin, CPF);
+
+                indice_comprador = CC.procurarCliente(clientes, CPF);
+
+                if(indice_comprador == -1){
+                    CC.adicionarPolimorfico(clientes, cadClientes, pIdCliente);
+                }
+            }while(indice_comprador == -1);
+            
+            nomeComprador = clientes[indice_comprador]->nome;
+            id_comprador = clientes[indice_comprador]->numID;
 
             //adicionar jogos ao vetor de jogos comprados
             criarListaJogos(jogosComprados, jogos);
@@ -241,6 +245,11 @@ class venda{
             }
 
             valorTotal = calValorTotal(jogosComprados);
+
+            cout << "VIP " << clientes[indice_comprador]->VIP;
+            if(clientes[indice_comprador]->VIP == 1){
+                valorTotal = valorTotal * 0.9;
+            }
 
             //Data da compra
             time_t now = time(0);
@@ -255,7 +264,7 @@ class venda{
             GF.ChecarTipoErrado(tempRsp);
             if(tempRsp == 's'){
                 proximoId += 1;
-                clientes[id_comprador].ultimaCompra = tempData;
+                clientes[indice_comprador]->ultimaCompra = tempData;
                 return tempVenda;
             }
             else{
@@ -281,11 +290,11 @@ class venda{
             }
         }
 
-        void alterarUmaVenda(venda &venda, vector<jogo> &jogos, vector<usuario> &clientes){
+        void alterarUmaVenda(venda &venda, vector<jogo> &jogos, vector<usuario*> &clientes){
             char alterarMais;
             int rsp;
-            string cpf_cnpj;
-            usuario tempUsuario;
+            string cpf;
+
             while(1){
                 cout << "\nO que deseja alterar? (Outro para cancelar)\n1.Comprador\n2.Lista de Itens\n";
                 GF.ChecarTipoErrado(rsp);
@@ -295,8 +304,8 @@ class venda{
                         int id_cliente;
                         cout << "Escreva o cpf/cnpj do comprador (000.000.000-00 / 00.000.000/0000-00):";
                         GF.LimparBuffer();
-                        getline(cin, cpf_cnpj);
-                        id_cliente = tempUsuario.procurarCliente(clientes, cpf_cnpj);
+                        getline(cin, cpf);
+                        id_cliente = CC.procurarCliente(clientes, cpf);
 
                         if(id_cliente == -1){
                             //Criar Cliente
@@ -326,7 +335,7 @@ class venda{
             }
         }
 
-        void alterarVendas(vector<venda> &vendas, vector<jogo> &jogos, vector<usuario> &clientes){
+        void alterarVendas(vector<venda> &vendas, vector<jogo> &jogos, vector<usuario*> &clientes){
             int idEncontrado = -1, id;
             char tentarDenovo;
 
@@ -368,7 +377,7 @@ class venda{
                 
         }
 
-        void exibirTodasVendas(vector<venda> &vendas, vector<usuario> &clientes){
+        void exibirTodasVendas(vector<venda> &vendas, vector<usuario*> &clientes){
             bool mostrarCabecalho = true;
             if(vendas.size() == 0){
                 cout << "Não há vendas cadastrados\n";
@@ -386,7 +395,7 @@ class venda{
             GF.EnterContinue();
         }
 
-        void exibirUmaVenda(vector<venda> &vendas, vector<usuario> &clientes){
+        void exibirUmaVenda(vector<venda> &vendas, vector<usuario*> &clientes){
             int idEncontrado = -1, id, quantidade = 0;
             char tentarDenovo;
 
@@ -449,7 +458,7 @@ class venda{
             GF.EnterContinue();
         }
 
-        void removerVenda(vector<venda> &vendas, vector<usuario> &clientes, vector<jogo> &jogos, int &cadastrados){
+        void removerVenda(vector<venda> &vendas, vector<usuario*> &clientes, vector<jogo> &jogos, int &cadastrados){
             while(1){
                 string Nome;
                 int rsp, id_escolhido, quantidade = 0;
