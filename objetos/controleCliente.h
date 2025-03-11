@@ -17,7 +17,16 @@ class controleCliente{
             return -1;
         }
 
-        int adicionarPolimorfico(vector<usuario*> &clientes, int &cadastrados, int &proximoID){
+        int procurarClienteId(vector<usuario*> &pessoas, int id){
+            for(int i = 0; i < pessoas.size(); i++){
+                if(pessoas[i]->numID == id){
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        int adicionarPolimorfico(vector<usuario*> &clientes, int &proximoID){
             int tipo, VIP;
             bool cpfExiste = false;
             string nome, CPF, telefone;
@@ -27,7 +36,6 @@ class controleCliente{
 
             cout << "Qual tipo de cliente deseja adicionar?\n1.Cliente Comum\n2.Cliente Vip" << endl;
             GF.ChecarTipoErrado(tipo, 1, 2);
-            GF.LimparBuffer();
 
             cout << "Digite o nome do cliente: ";
             getline(cin, nome);
@@ -51,7 +59,6 @@ class controleCliente{
                 tempCliente = new clienteComum(nome, CPF, telefone, proximoID, VIP);
                 tempCliente->VIP = 0;
                 clientes.push_back(tempCliente);
-                cadastrados ++;
                 proximoID ++;
                 return proximoID - 1;
             }
@@ -59,7 +66,6 @@ class controleCliente{
                 tempCliente = new clienteVIP(nome, CPF, telefone, proximoID, VIP);
                 tempCliente->VIP = 1;
                 clientes.push_back(tempCliente);
-                cadastrados ++;
                 proximoID ++;
                 return proximoID - 1;
             }
@@ -153,7 +159,7 @@ class controleCliente{
                     cout << "\n";
                 }
             }
-
+            GF.LimparBuffer();
             GF.EnterContinue();
         }
 
@@ -168,7 +174,7 @@ class controleCliente{
             }
 
             cout << "Total de usuários cadastrados: " << totalCadastrados << "\n";
-
+            GF.LimparBuffer();
             GF.EnterContinue();
         }
 
@@ -176,13 +182,13 @@ class controleCliente{
             int id;
             cout << "Digite o número de ID do usuário que deseja ver: "<< endl;
             GF.ChecarTipoErrado(id, 0, pessoas.size() - 1);
-            GF.LimparBuffer();
 
             bool idEncontrado = false;
             for(int i = 0; i < pessoas.size(); i++){
                 if (pessoas[i]->numID == id){
                     pessoas[i]->relatorioUser();
                     cout << endl;
+
                     GF.EnterContinue();
                     idEncontrado = true;
                     break;

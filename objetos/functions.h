@@ -15,17 +15,17 @@ using namespace std;
 class funcoes : public GeneralFunctions{ 
     public:
 
-        void adicionar(vector<jogo> &jogos, vector<usuario*> &usuarios, vector<venda> &vendas, int &Cadastrados, int option, int &proximoId, int &cadClientes, int &idCliente){
+        void adicionar(vector<jogo> &jogos, vector<usuario*> &usuarios, vector<venda> &vendas, int option){
             if(option == 1){
-                jogo newgame = newgame.AdicionarJogo(jogos, Cadastrados, proximoId);
+                jogo newgame = newgame.AdicionarJogo(jogos, proximoIdJogos);
                 jogos.push_back(newgame);
             }
             else if(option == 2){
-                CC.adicionarPolimorfico(usuarios, Cadastrados, proximoId);
+                CC.adicionarPolimorfico(usuarios, proximoIdPessoas);
             }
             else if(option == 3){
                 venda newsale;
-                newsale = newsale.adicionarVenda(jogos, usuarios, vendas, proximoId, cadClientes, idCliente);
+                newsale = newsale.adicionarVenda(jogos, usuarios, vendas);
                 if(newsale.ID == -1){
                     //Venda não pôde ser concluída
                 }
@@ -36,17 +36,17 @@ class funcoes : public GeneralFunctions{
             
         }
 
-        void remover(vector<jogo> &jogos, vector<usuario*> &usuarios, vector<venda> &vendas, int cadastrados, int option){
+        void remover(vector<jogo> &jogos, vector<usuario*> &usuarios, vector<venda> &vendas, int option){
             if(option == 1){
                 jogo newgame;
-                newgame.removerJogo(jogos, cadastrados);
+                newgame.removerJogo(jogos);
             }
             else if(option == 2){
                 CC.removerUsuario(usuarios);
             }
             else if(option == 3){
                 venda tempVenda;
-                tempVenda.removerVenda(vendas, usuarios, jogos ,cadastrados);
+                tempVenda.removerVenda(vendas, usuarios, jogos);
             }
         }
 

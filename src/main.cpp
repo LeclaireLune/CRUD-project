@@ -3,6 +3,11 @@ int MAXNOMEJOGO = 15;
 int MAXNOMEDEV = 15;
 int MAXCLIENTEID = 30;
 
+//Variáveis globais para controlar os id's
+int proximoIdVenda = 0;
+int proximoIdJogos = 0;
+int proximoIdPessoas = 0;
+
 #include "../objetos/manager.h"
 #include "../objetos/save_load.h"
 #include <iostream>
@@ -23,7 +28,7 @@ int main(){
         int rsp;
 
         system("clear");
-        cout << "Sistema de Controle\n";
+        cout << "Sistema de Controle de Vendas\n";
         cout << "Escolha uma das opções\n";
         cout << "1.Realizar venda\n2.Controle Estoque\n3.Controle Clientes\n4.Listar todas\n5.Exibir uma\n6.Alterar\n7.Remover\n8.Exibir Relatório\n9.Sair\n";
         GF.ChecarTipoErrado(rsp, 1, 9);
@@ -31,7 +36,7 @@ int main(){
         switch(rsp){
             case 1:
                 //Realizar venda
-                manager.FC.adicionar(manager.jogos, manager.pessoas, manager.vendas, manager.vendasCadastradas, 3, manager.proximoIdVenda, manager.pessoasCadastradas, manager.proximoIdPessoas);
+                manager.FC.adicionar(manager.jogos, manager.pessoas, manager.vendas, 3);
                 break;
             case 2:
                 //Controle Estoque
@@ -57,7 +62,7 @@ int main(){
                 break;
             case 7:
                 //Remover
-                manager.FC.remover(manager.jogos, manager.pessoas, manager.vendas, manager.vendasCadastradas,  3);
+                manager.FC.remover(manager.jogos, manager.pessoas, manager.vendas, 3);
                 break;
             case 8:
                 //Exibir relatório

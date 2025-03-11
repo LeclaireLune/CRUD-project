@@ -22,6 +22,7 @@ class GeneralFunctions{
                 cout << "Opção inválida, tente novamente\n";
                 LimparBuffer();
             }
+            LimparBuffer();
             return;
         }
 
@@ -30,6 +31,7 @@ class GeneralFunctions{
                 cout << "Opção inválida, tente novamente\n";
                 LimparBuffer();
             }
+            LimparBuffer();
             return;
         }
 
@@ -38,13 +40,13 @@ class GeneralFunctions{
                 cout << "Opção inválida, tente novamente\n";
                 LimparBuffer();
             }
+            LimparBuffer();
             return;
         }
 
         //Apresenta o "aperte enter para continuar" para parar a execução para exibir algo
         void EnterContinue(){
-            cout << "Aperte enter para continuar" << endl;
-            LimparBuffer();
+            cout << "Aperte enter para continuar";
             cin.get();
         }
 };

@@ -98,17 +98,18 @@ class jogo{
             string Nome;
             char tentarDenovo;
 
-            cout << "Qual o nome do jogo?" << endl;
             GF.LimparBuffer();
+
+            cout << "Qual o nome do jogo? ";
             getline(cin, Nome);
             idEncontrado = iterarIdJogo(jogos, Nome);
 
             while(idEncontrado == -1){
                 cout << "Não foi encontrado, tentar novamente(s/n)? ";
                 cin >> tentarDenovo;
+
                 if(tentarDenovo == 's'){
                     cout << "Qual o nome do jogo? ";
-                    GF.LimparBuffer();
                     getline(cin, Nome);
                     idEncontrado = iterarIdJogo(jogos, Nome);
                 }
@@ -144,7 +145,6 @@ class jogo{
             else{
                 cout << "Não há jogos cadastrados\n";
             }
-
             GF.EnterContinue();
         }
 
@@ -159,22 +159,21 @@ class jogo{
                     n.relatorio(MAXNOMEJOGO, MAXNOMEDEV);
                 }
             }
-
+            GF.LimparBuffer();
             GF.EnterContinue();
         }
 
 
         //Adiciona um jogo no vetor
-        jogo AdicionarJogo(vector<jogo> &jogos, int &cadastrados, int &proximoId){
+        jogo AdicionarJogo(vector<jogo> &jogos, int &proximoId){
             string Nome, Dev;
             int disponiveis, id, dia, mes, ano, diaMax;
             float valor;
             date newDate;
 
+            GF.LimparBuffer();
             //Perguntas das informações do objeto
             cout << "Escreva o nome do jogo: ";
-        
-            GF.LimparBuffer();
             getline(cin, Nome);
 
             cout << "Escreva o preço: ";
@@ -184,7 +183,6 @@ class jogo{
             GF.ChecarTipoErrado(disponiveis);
 
             cout << "Escreva o nome do desenvolvedor: ";
-            GF.LimparBuffer();
             getline(cin, Dev);
 
             cout << "Escreva o ano do lançamento: ";
@@ -201,7 +199,6 @@ class jogo{
             id = proximoId;
 
             proximoId += 1;
-            cadastrados += 1;
             MAXNOMEJOGO = max(MAXNOMEJOGO, (int)Nome.size() + 2);
             MAXNOMEDEV = max(MAXNOMEDEV, (int)Dev.size() + 2);
 
@@ -210,7 +207,8 @@ class jogo{
         }
 
         //Remove um jogo do vetor
-        void removerJogo(vector<jogo> &jogos, int cadastrados){
+        void removerJogo(vector<jogo> &jogos){
+
             while(1){
                 string Nome;
                 int rsp, idEncontrado;
@@ -224,8 +222,8 @@ class jogo{
                         return;
                     }
 
-                int maiorNome = max(MAXNOMEJOGO, (int)jogos[idEncontrado].nome.size() + 2);
-                int maiorDev = max(MAXNOMEDEV, (int)jogos[idEncontrado].desenvolvedor.size() + 2);
+                    int maiorNome = max(MAXNOMEJOGO, (int)jogos[idEncontrado].nome.size() + 2);
+                    int maiorDev = max(MAXNOMEDEV, (int)jogos[idEncontrado].desenvolvedor.size() + 2);
 
                     cabecalhoRelatorio(maiorNome, maiorDev);
                     jogos[idEncontrado].relatorio(maiorNome, maiorDev);
@@ -243,7 +241,6 @@ class jogo{
                 if(correto == 's'){
                     jogos.erase(jogos.begin() + idEncontrado);
                     cout << "Jogo deletado com sucesso!\n";
-                    cadastrados -= 1;
                 }
 
                 cout << "Deseja deletar outro? (s/n) ";
@@ -293,7 +290,6 @@ class jogo{
                 switch (rsp){
                     case 1:
                         cout << "Escreva o novo nome: ";
-                        GF.LimparBuffer();
                         getline(cin,jogos[idEncontrado].nome);
                         MAXNOMEJOGO = max(MAXNOMEJOGO, (int)jogos[idEncontrado].nome.size() + 2);
                         break;
@@ -310,7 +306,6 @@ class jogo{
                     
                     case 4:
                         cout << "Escreva o novo desenvolvedor: ";
-                        GF.LimparBuffer();
                         getline(cin, jogos[idEncontrado].desenvolvedor);
                         MAXNOMEDEV = max(MAXNOMEDEV, (int)jogos[idEncontrado].desenvolvedor.size() + 2);
                         break;
@@ -364,7 +359,7 @@ class jogo{
                 cout << cadastrados << " Jogos diferentes |\t" << quantidadeTotal << " Quantidade Total |\t" << valorTotal << " Valor total\n";
 
             }
-
+            GF.LimparBuffer();
             GF.EnterContinue();
         }
 };

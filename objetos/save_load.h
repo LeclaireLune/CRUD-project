@@ -14,8 +14,9 @@ class save_load{
             ofstream jogosSaveFile("estoque.crud");
             ofstream vendasSaveFile("vendas.crud");
             ofstream clienteSaveFile("clientes.crud");
+            ofstream miscSaveFile("misc.crud");
 
-            if(!jogosSaveFile || !vendasSaveFile || !clienteSaveFile){
+            if(!jogosSaveFile || !vendasSaveFile || !clienteSaveFile || !miscSaveFile){
                 cout << "Problema ao abrir arquivo para salvar dados\n";
                 manager.FC.EnterContinue();
                 return -1;
@@ -29,6 +30,8 @@ class save_load{
                 vendasSaveFile.close();
                 salvarClientes(manager.pessoas, clienteSaveFile);
                 clienteSaveFile.close();
+                salvarMisc(miscSaveFile);
+                miscSaveFile.close();
 
                 cout << "Dados salvos\n";
                 return 1;
@@ -40,8 +43,9 @@ class save_load{
             ifstream jogosLoadFile("estoque.crud");
             ifstream vendasLoadFile("vendas.crud");
             ifstream clienteLoadFile("clientes.crud");
+            ifstream miscLoadFile("misc.crud");
 
-            if(!jogosLoadFile  || !vendasLoadFile || !clienteLoadFile){
+            if(!jogosLoadFile  || !vendasLoadFile || !clienteLoadFile || !miscLoadFile){
                 cout << "Problema ao abrir arquivo de dados salvos\n";
                 manager.FC.EnterContinue();
                 return -1;
@@ -53,13 +57,32 @@ class save_load{
                 vendasLoadFile.close();
                 carregarClientes(manager.pessoas, clienteLoadFile);
                 clienteLoadFile.close();
+                carregarMisc(miscLoadFile);
+                miscLoadFile.close();
                 return 1;
             }
         }
 
         //Salva variáveis quaisquer
-        void salvarMisc(){
+        void salvarMisc(ofstream &Arquivo){
+            Arquivo << proximoIdVenda << "\n" << proximoIdJogos << "\n" << proximoIdPessoas << "\n" << MAXNOMEJOGO << "\n" << MAXNOMEDEV << "\n" << MAXCLIENTEID;
+        }
 
+        void carregarMisc(ifstream &Arquivo){
+            string temp;
+
+            getline(Arquivo, temp);
+            proximoIdVenda = stoi(temp);
+            getline(Arquivo, temp);
+            proximoIdJogos = stoi(temp);
+            getline(Arquivo, temp);
+            proximoIdPessoas  = stoi(temp);
+            getline(Arquivo, temp);
+            MAXNOMEJOGO = stoi(temp);
+            getline(Arquivo, temp);
+            MAXNOMEDEV = stoi(temp);
+            getline(Arquivo, temp);
+            MAXCLIENTEID = stoi(temp);
         }
 
         //Carrega informações sobre os jogos
