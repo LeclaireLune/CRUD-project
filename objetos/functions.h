@@ -17,7 +17,7 @@ class funcoes : public GeneralFunctions{
 
         void adicionar(vector<jogo> &jogos, vector<usuario*> &usuarios, vector<venda> &vendas, int option){
             if(option == 1){
-                jogo newgame = newgame.AdicionarJogo(jogos, proximoIdJogos);
+                jogo newgame = newgame.AdicionarJogo(jogos);
                 jogos.push_back(newgame);
             }
             else if(option == 2){
