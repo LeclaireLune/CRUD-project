@@ -165,7 +165,7 @@ class jogo{
 
 
         //Adiciona um jogo no vetor
-        jogo AdicionarJogo(vector<jogo> &jogos, int &proximoId){
+        jogo AdicionarJogo(vector<jogo> &jogos){
             string Nome, Dev;
             int disponiveis, id, dia, mes, ano, diaMax;
             float valor;
@@ -196,9 +196,9 @@ class jogo{
             cout << "Escreva o dia do lançamento: ";
             GF.ChecarTipoErrado(dia, 1, diaMax);
 
-            id = proximoId;
+            id = proximoIdJogos;
 
-            proximoId += 1;
+            proximoIdJogos += 1;
             MAXNOMEJOGO = max(MAXNOMEJOGO, (int)Nome.size() + 2);
             MAXNOMEDEV = max(MAXNOMEDEV, (int)Dev.size() + 2);
 
