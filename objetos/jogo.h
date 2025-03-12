@@ -110,6 +110,7 @@ class jogo{
 
                 if(tentarDenovo == 's'){
                     cout << "Qual o nome do jogo? ";
+                    GF.LimparBuffer();  
                     getline(cin, Nome);
                     idEncontrado = iterarIdJogo(jogos, Nome);
                 }
